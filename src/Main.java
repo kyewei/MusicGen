@@ -48,19 +48,13 @@ public class Main {
         System.out.println(Note.getIntervalHigher(a, 8, 'P'));
         System.out.println(Note.getIntervalHigher(a, 8, 'A'));*/
 
-        /*for (Pitch pitch : MajorScale.allScales[MajorScale.indexFromKey("Cb")]) //C major scale
-            System.out.println(pitch);*/
+        for (Pitch[] pitchScales : MajorScale.allScales) //C major scale
+        {
+            for (Pitch pitch : pitchScales) //C major scale
+                System.out.print(pitch+ " ");
+            System.out.println("");
+        }
 
-        Pitch[] temp = new Pitch[7];
-        temp[0] = new Pitch(Note.Letter.C, Note.Accidental.Sharp);
-        temp[1] = Pitch.getHigherPitchWithInterval(temp[0], "M2");
-        temp[2] = Pitch.getHigherPitchWithInterval(temp[0], "M3");
-        temp[3] = Pitch.getHigherPitchWithInterval(temp[0], "P4");
-        temp[4] = Pitch.getHigherPitchWithInterval(temp[0], "P5");
-        temp[5] = Pitch.getHigherPitchWithInterval(temp[0], "M6");
-        temp[6] = Pitch.getHigherPitchWithInterval(temp[0], "M7");
-        for (Pitch thing : temp)
-            System.out.println(thing);
 
     }
 }
