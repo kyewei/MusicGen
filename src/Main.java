@@ -48,12 +48,16 @@ public class Main {
         System.out.println(Note.getIntervalHigher(a, 8, 'P'));
         System.out.println(Note.getIntervalHigher(a, 8, 'A'));*/
 
-        for (Pitch[] pitchScales : MajorScale.allScales) //C major scale
+        /*for (Pitch[] pitchScales : MajorScale.allScales) //C major scale
         {
             for (Pitch pitch : pitchScales) //C major scale
                 System.out.print(pitch+ " ");
             System.out.println("");
-        }
+        }*/
+
+        Pitch[] chordpitches = Chord.getChordPitches("Ddim7");
+        for (Pitch pitch : chordpitches)
+            System.out.println (pitch);
 
 
     }

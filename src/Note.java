@@ -1,25 +1,33 @@
 /**
  * Created by Kye on 2014-07-08.
  */
-public class Note extends Pitch {
-
+public class Note extends Pitch //extension of Pitch with octave property
+{
     protected int octave;
 
-    public Note(Letter letter, Accidental accidental, int octave)
+    public Note(Letter letter, Accidental accidental, int octave) //Constructor
     {
         super(letter, accidental);
         this.octave = octave;
         this.chromaticNumber+=octave*12;
     }
 
-    public Note(String noteName)
+    public Note(String noteName) //Constructor from string with octave at the end
     {
         super(noteName.substring(0,noteName.length()-1));
         this.octave = Integer.parseInt(noteName.substring(noteName.length()-1, noteName.length()));
         this.chromaticNumber+=octave*12;
     }
 
-    public int getOctave(){ return octave; }
+    public Note (Note pitch) //copy constructor
+    {
+        this(pitch.letter, pitch.accidental, pitch.getOctave());
+    }
+
+    public int getOctave() //accessor method
+    {
+        return octave;
+    }
 
     @Override
     public String toString()
@@ -122,16 +130,19 @@ public class Note extends Pitch {
     }
 
     // M2, m2, P4, A4, d5
+    //Above method with string input instead
     public static Note getIntervalHigher(Note a, String entry)
     {
         return getIntervalHigher(a, Integer.parseInt(entry.substring(1)), entry.charAt(0));
     }
 
-    //Gets intervals below a given note, using a negative argument
+    //Gets intervals below a given note, using a negative argument for interval
     public static Note getIntervalLower(Note a, int interval, char quality)
     {
         return getIntervalHigher(a, -interval, quality);
     }
+
+    // M-2, m-2, P-4, A-4, d-5
     public static Note getIntervalLower(Note a, String entry)
     {
         return getIntervalLower(a, Integer.parseInt(entry.substring(1)), entry.charAt(0));

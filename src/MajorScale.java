@@ -10,6 +10,11 @@ public class MajorScale extends Scale
     {
         return generateSpecificScale(scaleKey, new String[]{"P1", "M2", "M3", "P4", "P5", "M6", "M7"});
     }
+    public static Pitch[] generateScale(Pitch root)
+    {
+        return generateSpecificScale(new Pitch(root), new String[]{"P1", "M2", "M3", "P4", "P5", "M6", "M7"});
+    }
+
 
     static
     {

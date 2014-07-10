@@ -10,6 +10,10 @@ public class HarmonicMinorScale extends Scale
     {
         return generateSpecificScale(scaleKey, new String[]{"P1", "M2", "m3", "P4", "P5", "m6", "M7"});
     }
+    public static Pitch[] generateScale(Pitch root)
+    {
+        return generateSpecificScale(new Pitch(root), new String[]{"P1", "M2", "m3", "P4", "P5", "m", "M7"});
+    }
 
     static
     {
