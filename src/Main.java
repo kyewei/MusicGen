@@ -1,12 +1,12 @@
 public class Main {
 
     public static void main(String[] args) {
-        /*javax.swing.SwingUtilities.invokeLater(new Runnable() {
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 HarmonyGUI.createAndShowGUI();
             }
         });
-        System.out.println("Hello World!");*/
+        System.out.println("Hello World!");
 
         Note a = new Note(Note.Letter.C, Note.Accidental.Natural, 4);
         Note b = new Note("G4");
@@ -55,10 +55,20 @@ public class Main {
             System.out.println("");
         }*/
 
-        Pitch[] chordpitches = Chord.getChordPitches("Ddim7");
+        /*Pitch[] chordpitches = Chord.getChordPitches("Ddim7");
         for (Pitch pitch : chordpitches)
-            System.out.println (pitch);
+            System.out.println (pitch);*/
+
+        MajorScale workingscale = new MajorScale("Bb");
+        /*for (Pitch pitch : workingscale.scale)
+            System.out.println (pitch);*/
+
+
+
+
 
 
     }
+
+
 }
