@@ -11,6 +11,11 @@ public class MajorScale extends Scale
         scale = allScales[indexFromKey(key)];
     }
 
+    public MajorScale (Pitch key)
+    {
+        scale = allScales[indexFromKey(key)];
+    }
+
     //LetterNames, like C#, Bbb, G
     public static Pitch[] generateScale(String scaleKey)
     {
