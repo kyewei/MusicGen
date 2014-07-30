@@ -10,7 +10,7 @@ public class Main {
             }
         });
 
-        //Note a = new Note(Note.Letter.G, Note.Accidental.Natural, 4);
+        //Note a = new Note(Note.Letter.G, Note.Accidental.Sharp, 4);
         //Note b = new Note("G4");
         //System.out.println(a.equals(b));
         //System.out.println(a.hashCode());
@@ -19,15 +19,15 @@ public class Main {
         //Note.Letter test = Note.Letter.A;
         //System.out.println(Note.Letter.A == Note.Letter.G.getNext());
 
-        //System.out.println(Note.getIntervalLower(a, 5, 'A'));
-        //System.out.println(Note.getIntervalHigher(a, 1, 'P'));
+        //System.out.println(Note.getIntervalLower(a, 5, 'P'));
+        //System.out.println(Note.getIntervalHigher(a, 4, 'D'));
 
-        /*Pitch[] chordpitches = Chord.getChordPitches("Ddim7");
-        for (Pitch pitch : chordpitches)
-            System.out.println (pitch);*/
+        //Pitch[] chordpitches = Chord.getChordPitches("Bdim7");
+        //for (Pitch pitch : chordpitches)
+        //    System.out.println (pitch);
 
-        //MajorScale workingscale = new MajorScale("Bb");
-        /*for (Pitch pitch : workingscale.scale)
+        /*MajorScale workingscale = new MajorScale("Bb");
+        for (Pitch pitch : workingscale.scale)
             System.out.println (pitch);*/
 
         //Note test = new Note("A4");

@@ -10,6 +10,12 @@ public class Note extends Pitch //extension of Pitch with octave property
         super(letter, accidental);
         this.octave = octave;
         this.chromaticNumber+=octave*12;
+        this.letterNum+=octave*7;
+    }
+
+    public Note(Pitch pitch, int octave)
+    {
+        this(pitch.letter, pitch.accidental, octave);
     }
 
     public Note(String noteName) //Constructor from string with octave at the end
@@ -17,6 +23,7 @@ public class Note extends Pitch //extension of Pitch with octave property
         super(noteName.substring(0,noteName.length()-1));
         this.octave = Integer.parseInt(noteName.substring(noteName.length()-1, noteName.length()));
         this.chromaticNumber+=octave*12;
+        this.letterNum+=octave*7;
     }
 
     public Note (Note pitch) //copy constructor
@@ -89,6 +96,30 @@ public class Note extends Pitch //extension of Pitch with octave property
             default : arrayIndex=-1;
         }
 
+        int deltaSemitone = qualityAndDegreeToSemitone[arrayIndex][((interval-1)%7+7)%7];
+
+        int currentLetterNumber = a.getLetterNum();
+        if (!reverse)
+            currentLetterNumber+=interval-1;
+        else
+            currentLetterNumber-=interval-1;
+        Letter tempLetter = Letter.getLetterFromLetterNum(currentLetterNumber%7);
+        int tempOctave = currentLetterNumber/7;
+        Accidental tempAccidental = a.accidental;
+
+        int needToMoveSemitone = (tempOctave*12+tempLetter.getChromaticNumber()+tempAccidental.getChromaticNumber())-a.getChromaticNumber();
+        if (!reverse && needToMoveSemitone!=deltaSemitone)
+        {
+            tempAccidental = tempAccidental.getNext(deltaSemitone-needToMoveSemitone);
+        }
+        else if (reverse && needToMoveSemitone!=deltaSemitone)
+        {
+            tempAccidental = tempAccidental.getNext(deltaSemitone*-1 - needToMoveSemitone);
+        }
+        return new Note(tempLetter, tempAccidental, tempOctave);
+
+
+        /*
         //Calculate semitones to move up by
         int deltaSemitone = qualityAndDegreeToSemitone[arrayIndex][((interval-1)%7+7)%7];
 
@@ -127,6 +158,7 @@ public class Note extends Pitch //extension of Pitch with octave property
         tempAccidental = tempAccidental.getNext(diff);
 
         return new Note(tempLetter,tempAccidental, tempOctave);
+        */
     }
 
     // M2, m2, P4, A4, d5

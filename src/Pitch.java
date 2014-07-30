@@ -6,13 +6,14 @@ public class Pitch
     protected Letter letter;
     protected Accidental accidental;
 
-    protected int chromaticNumber;
+    protected int chromaticNumber, letterNum;
 
     public Pitch(Letter letter, Accidental accidental) //Constructor based on specified letter and accidental
     {
         this.letter = letter;
         this.accidental = accidental;
         this.chromaticNumber= letter.getChromaticNumber() + accidental.getChromaticNumber();
+        this.letterNum = letter.getLetterNum();
     }
 
     public Pitch(String noteName) //converts notename to Pitch
@@ -23,6 +24,7 @@ public class Pitch
         else
             this.accidental = Accidental.fromString("");
         this.chromaticNumber= letter.getChromaticNumber() + accidental.getChromaticNumber();
+        this.letterNum = letter.getLetterNum();
     }
 
     public Pitch (Pitch pitch) //copy constructor
@@ -34,6 +36,8 @@ public class Pitch
     {
         return chromaticNumber;
     }
+
+    public int getLetterNum() { return letterNum; }
 
     //Gets interval (<8th) using Note class's method of the same name
     public static Pitch getHigherPitchWithInterval(Pitch a, int interval, char quality) // D/d - diminished, m - minor, M - major, P/p - perfect, A/a - augmented
@@ -117,9 +121,11 @@ public class Pitch
         C(0), D(2), E(4), F(5), G(7), A(9), B(11);
 
         private int chromaticNumber; //natural note's semitone in a system where C is 0
+        private int letterNum;
         private Letter(int num)
         {
             this.chromaticNumber = num;
+            this.letterNum = (((int)(this.name().charAt(0))-'C') + 7)%7;
         }
 
         public int getChromaticNumber(){ return chromaticNumber; }
@@ -128,6 +134,10 @@ public class Pitch
         public String toString()
         {
             return this.name();
+        }
+        public int getLetterNum() { return letterNum; }
+        public static Letter getLetterFromLetterNum(int letterNum) {
+            return Letter.valueOf(""+((char)((letterNum>4?letterNum-7:letterNum)+'C')));
         }
         public Letter getNext() { return this.getNext(1); }
         public Letter getNext(int howMany) //gets letter relative to current letter, C,D,E,F,G,A,B

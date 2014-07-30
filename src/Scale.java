@@ -45,7 +45,7 @@ public class Scale
             case F: index=15; break;
             case G: index=20; break;
             case A: index=25; break;
-            case B: index=35; break;
+            case B: index=30; break;
             default : index=0;
         }
         switch(root.accidental)
