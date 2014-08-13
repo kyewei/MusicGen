@@ -101,7 +101,7 @@ public class HarmonyEngine
             {1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,1,1,0,0,0,0,1,0,0,0,0,0},
             {0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
             {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+            {1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,1,1,0,0,0,0,1,0,0,0,0,0},
             {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
             {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
             {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -911,8 +911,8 @@ public class HarmonyEngine
             }
         }
 
-        //predominant harmony, 0-3 times
-        minForSection = (int)(Math.random()*4);
+        //predominant harmony, 1-3 times
+        minForSection = (int)(Math.random()*3)+1;
 
         for (int i=0; i< minForSection; ++i)
         {
@@ -945,7 +945,6 @@ public class HarmonyEngine
             for (int j=0; j< dominantMatrix.length; ++j)
                 if (dominantMatrix[currentPosition][j]==1)
                     choices.add(j);
-
             int random = (int)(Math.random()*choices.size());
 
             currentPosition=choices.get(random);
@@ -960,14 +959,11 @@ public class HarmonyEngine
                 }
             }
         }
+        position.add("I");
 
         int[] root = new int [position.size()];
         int[] inv = new int [position.size()];
         boolean[] is7 = new boolean[position.size()];
-
-        root[0]= 1;
-        inv[0] = 0;
-        is7[0]= false;
 
         int index = 0;
 
@@ -1031,8 +1027,6 @@ public class HarmonyEngine
             }
             ++index;
         }
-        //for (int k: root)
-        //    System.out.println(k);
         return new Object[]{root, inv, is7};
 
     }
