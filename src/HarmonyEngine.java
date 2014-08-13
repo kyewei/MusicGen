@@ -875,7 +875,7 @@ public class HarmonyEngine
     }*/
 
 
-    public int[] makeProperProgression()
+    public Object[] makeProperProgression() // object array of size 3, 0=root, 1=inversions, 2=isSeventh
     {
         //Dynamically sized since progression size is controlled random
         ArrayList<String> position = new ArrayList<String>();
@@ -886,11 +886,10 @@ public class HarmonyEngine
         //starting point in matrix array
         int currentPosition=0;
 
-
         //tonic harmony, 1-5 times
         int minForSection = (int)(Math.random()*5)+1;
 
-        for (int i=0; i< minForSection || Arrays.asList(tonicExit).contains(position.get(position.size() - 1)); ++i)
+        for (int i=0; i< minForSection; ++i)
         {
             ArrayList<Integer> choices = new ArrayList<Integer>();
             for (int j=0; j< tonicMatrix.length; ++j)
@@ -901,38 +900,65 @@ public class HarmonyEngine
 
             currentPosition=choices.get(random);
             position.add(indexToString.get(choices.get(random)));
+
+            if (i==minForSection-1) {
+                i--;
+                for (int k : tonicExit) {
+                    if (k == stringToIndex.get(position.get(position.size() - 1))) {
+                        i++;
+                    }
+                }
+            }
         }
 
         //predominant harmony, 0-3 times
         minForSection = (int)(Math.random()*4);
 
-        for (int i=0; i< minForSection || Arrays.asList(predominantExit).contains(position.get(position.size()-1)); ++i)
+        for (int i=0; i< minForSection; ++i)
         {
             ArrayList<Integer> choices = new ArrayList<Integer>();
-            for (int j=0; j< tonicMatrix.length; ++j)
-                if (tonicMatrix[currentPosition][j]==1)
+            for (int j=0; j< predominantMatrix.length; ++j)
+                if (predominantMatrix[currentPosition][j]==1)
                     choices.add(j);
 
             int random = (int)(Math.random()*choices.size());
 
             currentPosition=choices.get(random);
             position.add(indexToString.get(choices.get(random)));
+
+            if (i==minForSection-1) {
+                i--;
+                for (int k : predominantExit) {
+                    if (k == stringToIndex.get(position.get(position.size() - 1))) {
+                        i++;
+                    }
+                }
+            }
         }
 
         //dominant harmony, 1-2 times
-        minForSection = (int)(Math.random()*4);
+        minForSection = (int)(Math.random()*2)+1;
 
-        for (int i=0; i< minForSection || Arrays.asList(dominantExit).contains(position.get(position.size() - 1)); ++i)
+        for (int i=0; i< minForSection; ++i)
         {
             ArrayList<Integer> choices = new ArrayList<Integer>();
-            for (int j=0; j< tonicMatrix.length; ++j)
-                if (tonicMatrix[currentPosition][j]==1)
+            for (int j=0; j< dominantMatrix.length; ++j)
+                if (dominantMatrix[currentPosition][j]==1)
                     choices.add(j);
 
             int random = (int)(Math.random()*choices.size());
 
             currentPosition=choices.get(random);
             position.add(indexToString.get(choices.get(random)));
+
+            if (i==minForSection-1) {
+                i--;
+                for (int k : dominantExit) {
+                    if (k == stringToIndex.get(position.get(position.size() - 1))) {
+                        i++;
+                    }
+                }
+            }
         }
 
         int[] root = new int [position.size()];
@@ -943,16 +969,15 @@ public class HarmonyEngine
         inv[0] = 0;
         is7[0]= false;
 
-        int index = 1;
+        int index = 0;
 
         for (String text : position)
         {
             String newText = text.toLowerCase();
-
             int split = newText.length();
             for (int end = 0; end<newText.length(); ++end)
             {
-                if (newText.charAt(end)!='v' || newText.charAt(end)!='i'){
+                if (newText.charAt(end)!='v' && newText.charAt(end)!='i'){
                     split=end;
                     break;
                 }
@@ -963,56 +988,54 @@ public class HarmonyEngine
             if (roman.contains("v"))
             {
                 if (roman.charAt(0)=='v')
-                    root[index] = roman.length()-1;
+                    root[index] = 5 + roman.length()-1;
                 else //if (roman.charAt(roman.length()-1)=='v')
                     root[index] = 5-(roman.length()-1);
             }
             else
                 root[index] = roman.length();
 
-            //diminished
-            boolean isDim = text.charAt(split)=='°';
-            if (isDim)
-                split++;
+            if (split<newText.length()) {
+                //diminished
+                boolean isDim = text.charAt(split) == '°';
+                if (isDim)
+                    split++;
 
-            //chord type
-            String modifier="";
-            if (split<text.length())
-                modifier = text.substring(split);
-            else
-            {
-                is7[index]=false;
-                inv[index]=0;
-            }
+                //chord type
+                String modifier = "";
+                if (split < text.length())
+                    modifier = text.substring(split);
+                else {
+                    is7[index] = false;
+                    inv[index] = 0;
+                }
 
-            if (modifier.equals("") || modifier.equals("6") || modifier.equals("64"))
-            {
-                is7[index]=false;
-                if (modifier.equals("6"))
-                    inv[index]=1;
-                else if (modifier.equals("64"))
-                    inv[index]=2;
-            }
-            else //if (modifier == "7" || modifier == "65" || modifier =="43" || modifier =="42")
-            {
-                is7[index] = true;
-                if (modifier.equals("7"))
-                    inv[index]=0;
-                else if (modifier.equals("65"))
-                    inv[index]=1;
-                else if (modifier.equals("43"))
-                    inv[index]=2;
-                else if (modifier.equals("42"))
-                    inv[index]=3;
+                if (modifier.equals("") || modifier.equals("6") || modifier.equals("64")) {
+                    is7[index] = false;
+                    if (modifier.equals("6"))
+                        inv[index] = 1;
+                    else if (modifier.equals("64"))
+                        inv[index] = 2;
+                } else //if (modifier == "7" || modifier == "65" || modifier =="43" || modifier =="42")
+                {
+                    is7[index] = true;
+                    if (modifier.equals("7"))
+                        inv[index] = 0;
+                    else if (modifier.equals("65"))
+                        inv[index] = 1;
+                    else if (modifier.equals("43"))
+                        inv[index] = 2;
+                    else if (modifier.equals("42"))
+                        inv[index] = 3;
+                }
             }
             ++index;
         }
-
-        return root;
+        //for (int k: root)
+        //    System.out.println(k);
+        return new Object[]{root, inv, is7};
 
     }
-
-
 
     public String convertProgressionToRoman()
     {
@@ -1022,9 +1045,9 @@ public class HarmonyEngine
     public String convertProgressionToRoman(int[] progression, int[] inversions, boolean[] isSeventh)
     {
         String temp = "";
-        for (int k : progression)
+        for (int i=0; i< progression.length; ++i)
         {
-            switch (k)
+            switch (progression[i])
             {
                 case 1: temp+="I"; break;
                 case 2: temp+="ii"; break;
@@ -1033,6 +1056,21 @@ public class HarmonyEngine
                 case 5: temp+="V"; break;
                 case 6: temp+="vi"; break;
                 case 7: temp+="vii°"; break;
+            }
+            if (isSeventh[i]==false) {
+                switch (inversions[i]) {
+                    case 0: break;
+                    case 1: temp += "6"; break;
+                    case 2: temp += "64"; break;
+                }
+            }
+            else if (isSeventh[i]==true) {
+                switch (inversions[i]) {
+                    case 0: temp+="7"; break;
+                    case 1: temp+="65"; break;
+                    case 2: temp+="43"; break;
+                    case 3: temp+="42"; break;
+                }
             }
             temp+="-";
 

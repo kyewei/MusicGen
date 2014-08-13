@@ -75,6 +75,8 @@ public class HarmonyController
                     engine.currentProgression = engine.makeNLongChordProgression2(8, 2, 1, 1);
                 */
 
+                engine.buildBass();
+
                 panel.progressionInfo.setText(engine.convertProgressionToRoman());
                 panel.numberOfChordsInfo.setText(""+engine.numberOfChords);
 
@@ -90,6 +92,10 @@ public class HarmonyController
                 //mainFrame.repaint();
 
                 engine.buildBass();
+
+                panel.progressionInfo.setText(engine.convertProgressionToRoman());
+                panel.numberOfChordsInfo.setText(""+engine.numberOfChords);
+
                 panel.scorePanel.updateCurrentChord(engine.currentChord);
 
                 //((JButton)e.getSource()).setEnabled(true);
@@ -110,6 +116,16 @@ public class HarmonyController
             {
                 //((JButton)e.getSource()).setEnabled(false);
                 //mainFrame.repaint();
+
+                Object[] arrays = engine.makeProperProgression();
+                engine.currentProgression = (int[])(arrays[0]);
+                engine.inversions = (int[])(arrays[1]);
+                engine.isSeventh = (boolean[])(arrays[2]);
+
+                System.out.println(engine.convertProgressionToRoman());
+
+                panel.progressionInfo.setText(engine.convertProgressionToRoman());
+                panel.numberOfChordsInfo.setText(""+engine.numberOfChords);
 
                 panel.scorePanel.updateCurrentChord(engine.currentChord);
 
