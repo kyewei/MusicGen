@@ -27,8 +27,8 @@ public class HarmonyController
     {
         panel.button0.addActionListener(new Action("Action", KeyEvent.VK_A));
         panel.button1.addActionListener(new Action());
-        panel.button2.addActionListener(new Action());
-        panel.button3.addActionListener(new Action());
+        //panel.button2.addActionListener(new Action());
+        //panel.button3.addActionListener(new Action());
 
         panel.exit.addActionListener(new Action());
 
@@ -58,24 +58,28 @@ public class HarmonyController
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (e.getSource()==panel.button0 || e.getSource()==panel.button1 || e.getSource()==panel.button2 || e.getSource()==panel.button3)
+            if (e.getSource()==panel.button0 || e.getSource()==panel.button1/* || e.getSource()==panel.button2 || e.getSource()==panel.button3*/)
             {
                 //((JButton)e.getSource()).setEnabled(false);
                 //mainFrame.repaint();
 
+                engine.reset();
+
                 if (e.getSource()==panel.button0)
-                    engine.currentProgression = engine.makeNLongChordProgression2(8, 1, 1, 1);
-                else if (e.getSource()==panel.button1)
-                    engine.currentProgression = engine.makeNLongChordProgression2(8, 2, 1, 1);
-                else if (e.getSource()==panel.button2)
                     engine.currentProgression = engine.makeNLongChordProgression(8, 1, 1, 1);
-                else if (e.getSource()==panel.button3)
+                else if (e.getSource()==panel.button1)
                     engine.currentProgression = engine.makeNLongChordProgression(8, 2, 1, 1);
+                /*else if (e.getSource()==panel.button2)
+                    engine.currentProgression = engine.makeNLongChordProgression2(8, 1, 1, 1);
+                else if (e.getSource()==panel.button3)
+                    engine.currentProgression = engine.makeNLongChordProgression2(8, 2, 1, 1);
+                */
 
                 panel.progressionInfo.setText(engine.convertProgressionToRoman());
                 panel.numberOfChordsInfo.setText(""+engine.numberOfChords);
-                engine.reset();
+
                 panel.scorePanel.updateCurrentChord(engine.currentChord);
+                panel.scorePanel.updateReference(engine.getSoprano(), engine.getAlto(), engine.getTenor(), engine.getBass());
 
                 //((JButton)e.getSource()).setEnabled(true);
                 mainFrame.repaint();
@@ -96,7 +100,7 @@ public class HarmonyController
                 //((JButton)e.getSource()).setEnabled(false);
                 //mainFrame.repaint();
 
-                engine.start();
+                engine.next();
                 panel.scorePanel.updateCurrentChord(engine.currentChord);
 
                 //((JButton)e.getSource()).setEnabled(true);
@@ -107,12 +111,10 @@ public class HarmonyController
                 //((JButton)e.getSource()).setEnabled(false);
                 //mainFrame.repaint();
 
-                engine.next();
                 panel.scorePanel.updateCurrentChord(engine.currentChord);
 
                 //((JButton)e.getSource()).setEnabled(true);
                 mainFrame.repaint();
-                //engine.loop();
             }
             else if (e.getSource() ==panel.prevButton)
             {

@@ -29,7 +29,7 @@ public class HarmonyView extends JPanel {
         mainFrame.setVisible(true);
     }
 
-    public JButton button0, button1, button2, button3, button4, makeBass, startButton, nextButton, prevButton, selectUp, selectDown, fun;
+    public JButton button0, button1, /*button2, button3, */button4, makeBass, startButton, nextButton, prevButton, selectUp, selectDown, fun;
     public JLabel keyInfo, progressionInfo, numberOfChordsInfo;
     public JPanel keyPanel, progressionPanel, middlePanel, navigationPanel;
     //public JTextField middleText;
@@ -75,12 +75,12 @@ public class HarmonyView extends JPanel {
         middlePanel.add(new JLabel("Generate Chord Progression Using Matrix: "));
         button0 = new JButton("Complex");
         button1 = new JButton("Simple");
-        button2 = new JButton("Complex, No Tonic");
-        button3 = new JButton("Simple, No Tonic");
+        //button2 = new JButton("Complex, No Tonic");
+        //button3 = new JButton("Simple, No Tonic");
         middlePanel.add(button0);
         middlePanel.add(button1);
-        middlePanel.add(button2);
-        middlePanel.add(button3);
+        //middlePanel.add(button2);
+        //middlePanel.add(button3);
         middlePanel.add(new JLabel(" or "));
         button4 = new JButton("Enter One");
         middlePanel.add(button4);
@@ -95,12 +95,12 @@ public class HarmonyView extends JPanel {
         //Navigation Panel
         navigationPanel = new JPanel();
         makeBass = new JButton("Make Bass");
-        startButton = new JButton("Start");
+        startButton = new JButton("Random Chord");
         prevButton = new JButton("Previous");
         nextButton = new JButton("Next");
         //selectUp = new JButton("Up");
         //selectDown = new JButton("Down");
-        fun = new JButton("Fun");
+       fun = new JButton("FunButton");
         navigationPanel.add(makeBass);
         navigationPanel.add(startButton);
         navigationPanel.add(prevButton);
