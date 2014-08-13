@@ -54,6 +54,12 @@ public class MajorScale extends Scale
         return new Pitch[]{scale[scaleDegree], scale[(scaleDegree+2)%7], scale[(scaleDegree+4)%7]};
         //warning, does not instantiate new Pitches
     }
+    public Pitch[] getDiatonic7th(int scaleDegree)
+    {
+        scaleDegree -=1; //array start at 0
+        return new Pitch[]{scale[scaleDegree], scale[(scaleDegree+2)%7], scale[(scaleDegree+4)%7], scale[(scaleDegree+6)%7]};
+        //warning, does not instantiate new Pitches
+    }
 
     public static int returnNextProgression(int currentProgressionDegree)
     {

@@ -29,7 +29,7 @@ public class HarmonyView extends JPanel {
         mainFrame.setVisible(true);
     }
 
-    public JButton button0, button1, /*button2, button3, */button4, makeBass, startButton, nextButton, prevButton, selectUp, selectDown, fun;
+    public JButton button0, button1, /*button2, button3, */button4, makeBass, makeChord, nextButton, prevButton, selectUp, selectDown, fun;
     public JLabel keyInfo, progressionInfo, numberOfChordsInfo;
     public JPanel keyPanel, progressionPanel, middlePanel, navigationPanel;
     //public JTextField middleText;
@@ -95,14 +95,14 @@ public class HarmonyView extends JPanel {
         //Navigation Panel
         navigationPanel = new JPanel();
         makeBass = new JButton("Make Bass");
-        startButton = new JButton("Random Chord");
+        makeChord = new JButton("Random Chord");
         prevButton = new JButton("Previous");
         nextButton = new JButton("Next");
         //selectUp = new JButton("Up");
         //selectDown = new JButton("Down");
-       fun = new JButton("FunButton");
+        fun = new JButton("FunButton");
         navigationPanel.add(makeBass);
-        navigationPanel.add(startButton);
+        navigationPanel.add(makeChord);
         navigationPanel.add(prevButton);
         navigationPanel.add(nextButton);
         //navigationPanel.add(selectUp);

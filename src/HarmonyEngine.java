@@ -12,11 +12,14 @@ public class HarmonyEngine
     {
         //defaults
         numberOfChords=8;
-        currentProgression = new int[]{1,3,4,5,4,1,5,1};
         key = new Pitch("C");
         scale = new MajorScale(key);
+        usedProper = false;
 
         reset();
+        currentProgression = new int[]{1,3,4,5,4,1,5,1};
+        buildBass();
+
     }
 
     public void reset()
@@ -28,6 +31,7 @@ public class HarmonyEngine
         alto = new Note[numberOfChords];
         tenor = new Note[numberOfChords];
         bass = new Note[numberOfChords];
+        currentProgression = new int[numberOfChords];
         inversions = new int[numberOfChords];
         isSeventh = new boolean[numberOfChords];
 
@@ -51,6 +55,8 @@ public class HarmonyEngine
     public Note[] getBass() { return bass; }
 
     public Note boundaryBassHigh;
+
+    public boolean usedProper;
 
     public int currentChord;
     public void goPrev()
@@ -76,12 +82,17 @@ public class HarmonyEngine
             {0, 2, 0, 1, 0, 1, 5, 8, 10}, //C3, G3, C4, E4
             {0, 1, 0, 2, 0, 1, 10, 15, 19}, //C3, E4, C5, G5
             {0, 2, 0, 1, 0, 1, 12, 15, 17} //C3, G4, C5, E5
+
     };
 
     //dynamically created by static initializer
     public static int[][] extendedRootPosition;
     public static int[][] extendedFirstInversion;
     public static int[][] extendedSecondInversion;
+    public static int[][] extended7RootPosition;
+    public static int[][] extended7FirstInversion;
+    public static int[][] extended7SecondInversion;
+    public static int[][] extended7ThirdInversion;
 
 
     public static int[][] tonicMatrix = new int[][]{
@@ -184,13 +195,13 @@ public class HarmonyEngine
             {0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0},
             {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
             {0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0},
+            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0},
+            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0},
+            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0},
             {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
             {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0},
+            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0},
             {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
             {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
             {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -289,6 +300,10 @@ public class HarmonyEngine
         loop('0');
         loop('1');
         loop('2');
+        loop('5');
+        loop('6');
+        loop('7');
+        loop('8');
     }
 
 
@@ -308,20 +323,22 @@ public class HarmonyEngine
             boolean isSuccess;
             Note tempTenor, tempAlto, tempSoprano;
 
+            int[][] referenceArray;
+            if (inversions[currentChord] == 0)
+                referenceArray = extendedRootPosition;
+            else //if (inversions[currentChord]==1)
+                referenceArray = extendedFirstInversion;
+
+            if (currentChord==0)
+                referenceArray=arrangements;
+
 
             //Loop getting a random arrangement until one matches criteria
-            int startElement = (int) (Math.random() * arrangements.length);
+            int startElement = (int) (Math.random() * referenceArray.length);
             int counter = startElement;
             do {
                 isSuccess = true;
-                int[][] referenceArray;
-                if (inversions[currentChord] == 0)
-                    referenceArray = extendedRootPosition;
-                else //if (inversions[currentChord]==1)
-                    referenceArray = extendedFirstInversion;
 
-                if (currentChord==0)
-                    referenceArray=arrangements;
 
                 tempTenor = new Note(possiblePitches[referenceArray[counter][1]], (bass[currentChord].getLetterNum() + referenceArray[counter][6] - 1) / 7);
                 tempAlto = new Note(possiblePitches[referenceArray[counter][2]], (bass[currentChord].getLetterNum() + referenceArray[counter][7] - 1) / 7);
@@ -468,21 +485,32 @@ public class HarmonyEngine
         loop('p');
     }
 
-
-    //p for print all, 0 for 53, 1 for 63, 2 for 64,
     public static void loop(char arg) //method that found me all the possible inversions
     {
-        Note[] notes = new Note[]{new Note("C3"), new Note("E3"), new Note("G3"), new Note("C4"), new Note("E4"), new Note("G4"), new Note("C5"), new Note("E5"), new Note("G5"), new Note("C6"), new Note("E6"), new Note("G6"), new Note("C7")};
+        //p for print all, 0 for 53, 1 for 63, 2 for 64, 5 for 753, 6 for 653, 7 for 643, 8 for 642
+
+        Note[] notes;
+        boolean use7=false;
+        if (arg =='0'|| arg == '1' || arg == '2')
+        {
+            notes = new Note[]{new Note("C3"), new Note("E3"), new Note("G3"), new Note("C4"), new Note("E4"), new Note("G4"), new Note("C5"), new Note("E5"), new Note("G5"), new Note("C6"), new Note("E6"), new Note("G6"), new Note("C7")};
+
+        }
+        else //if (arg =='5' || arg =='6'|| arg=='7'|| arg=='8') and p
+        {
+            notes = new Note[]{new Note("C3"), new Note("E3"), new Note("G3"), new Note("B3"), new Note("C4"), new Note("E4"), new Note("G4"), new Note("B4"), new Note("C5"), new Note("E5"), new Note("G5"), new Note("B5"), new Note("C6"), new Note("E6"), new Note("G6"), new Note("B6"), new Note("C7")};
+            use7=true;
+        }
         boolean triplettrack = false;
         int tripletnum = 0;
 
         ArrayList<ArrayList<Note>> noteList = new ArrayList<ArrayList<Note>>();
 
-        for (int i=8192; i>=0; --i)
+        for (int i=(!use7?8192:131072); i>=0; --i)
         {
             ArrayList<Note> array = new ArrayList<Note>();
             String text = Integer.toBinaryString(i);
-            while (text.length()<13)
+            while (text.length()<notes.length)
             {
                 text = "0"+text;
             }
@@ -521,66 +549,88 @@ public class HarmonyEngine
                 if (array.get(0).getChromaticNumber()>=48)
                     isGood=false;
 
-                int cCount=0, eCount=0, gCount=0;
+                int cCount=0, eCount=0, gCount=0, bCount=0;
 
                 for (Note note : array){
                     if (note.toString().charAt(0)=='C')
                         cCount++;
-                    if (note.toString().charAt(0)=='E')
+                    else if (note.toString().charAt(0)=='E')
                         eCount++;
-                    if (note.toString().charAt(0)=='G')
+                    else if (note.toString().charAt(0)=='G')
                         gCount++;
+                    else if (note.toString().charAt(0)=='B')
+                        bCount++;
                 }
                 if (cCount==0 ||eCount==0)
                     isGood=false;
-                if (array.get(0).toString().charAt(0)=='C')
-                {
-                    if (arg!='0' && arg!='p')
-                        isGood=false;
-                    if (cCount==2 && eCount==1 &&gCount==1)
-                    {}
-                    else if (cCount==1 && eCount==1 &&gCount==2)
-                    {}
-                    else if (cCount==3 && eCount==1 &&gCount==0)
-                    {}
-                    else
-                        isGood=false;
+                if (!use7) {
+                    if (array.get(0).toString().charAt(0) == 'C') {
+                        if (arg != '0' && arg != 'p')
+                            isGood = false;
+                        if (cCount == 2 && eCount == 1 && gCount == 1) {
+                        } else if (cCount == 1 && eCount == 1 && gCount == 2) {
+                        } else if (cCount == 3 && eCount == 1 && gCount == 0) {
+                        } else
+                            isGood = false;
+                    }
+                    else if (array.get(0).toString().charAt(0) == 'E') {
+                        if (arg != '1' && arg != 'p')
+                            isGood = false;
+                        if (cCount == 2 && eCount == 1 && gCount == 1) {
+                        } else if (cCount == 1 && eCount == 2 && gCount == 1) {
+                        } else if (cCount == 1 && eCount == 1 && gCount == 2) {
+                        } else
+                            isGood = false;
+                    }
+                    else if (array.get(0).toString().charAt(0) == 'G') {
+                        if (arg != '2' && arg != 'p')
+                            isGood = false;
+                        if (cCount == 2 && eCount == 1 && gCount == 1) {
+                        } else if (cCount == 1 && eCount == 2 && gCount == 1) {
+                        } else if (cCount == 1 && eCount == 1 && gCount == 2) {
+                        } else
+                            isGood = false;
+                    }
                 }
-                if (array.get(0).toString().charAt(0)=='E')
+                else //if (use7)
                 {
-                    if (arg!='1' && arg!='p')
-                        isGood=false;
-                    if (cCount==2 && eCount==1 &&gCount==1)
-                    {}
-                    else if (cCount==1 && eCount==2 &&gCount==1)
-                    {}
-                    else if (cCount==1 && eCount==1 &&gCount==2)
-                    {}
-                    else
-                        isGood=false;
-                }
-                if (array.get(0).toString().charAt(0)=='G')
-                {
-                    if (arg!='2' && arg!='p')
-                        isGood=false;
-                    if (cCount==2 && eCount==1 &&gCount==1)
-                    {}
-                    else if (cCount==1 && eCount==2 &&gCount==1)
-                    {}
-                    else if (cCount==1 && eCount==1 &&gCount==2)
-                    {}
-                    else
-                        isGood=false;
+                    if (array.get(0).toString().charAt(0) == 'C') {
+                        if (arg != '5' && arg != 'p')
+                            isGood = false;
+                        if (cCount == 1 && eCount == 1 && gCount == 1 && bCount ==1) {
+                        } else if (cCount == 2 && eCount == 1 && gCount == 0 && bCount ==1) {
+                        } else
+                            isGood = false;
+                    }
+                    else if (array.get(0).toString().charAt(0) == 'E') {
+                        if (arg != '6' && arg != 'p')
+                            isGood = false;
+                        if (cCount == 1 && eCount == 1 && gCount == 1 && bCount ==1) {
+                        } else
+                            isGood = false;
+                    }
+                    else if (array.get(0).toString().charAt(0) == 'G') {
+                        if (arg != '7' && arg != 'p')
+                            isGood = false;
+                        if (cCount == 1 && eCount == 1 && gCount == 1 && bCount ==1) {
+                        } else
+                            isGood = false;
+                    }
+                    else if (array.get(0).toString().charAt(0) == 'B') {
+                        if (arg != '7' && arg != 'p')
+                            isGood = false;
+                        if (cCount == 1 && eCount == 1 && gCount == 1 && bCount ==1) {
+                        } else
+                            isGood = false;
+                    }
+
                 }
 
-                //{0, 2, 0, 1, 0, 1, 12, 15, 17} //C3, G4, C5, E5
                 if (isGood){
                     noteList.add(array);
                 }
             }
-
             //tweak
-
             if (triplettrack)
             {
                 i++;
@@ -589,7 +639,6 @@ public class HarmonyEngine
         }
 
         int counter = 0;
-
         int[][] result = new int[noteList.size()][9];
 
         for (ArrayList<Note> array : noteList)
@@ -601,10 +650,12 @@ public class HarmonyEngine
                 {
                     if (array.get(k).toString().charAt(0)=='C')
                         System.out.print("0, ");
-                    if (array.get(k).toString().charAt(0)=='E')
+                    else if (array.get(k).toString().charAt(0)=='E')
                         System.out.print("1, ");
-                    if (array.get(k).toString().charAt(0)=='G')
+                    else if (array.get(k).toString().charAt(0)=='G')
                         System.out.print("2, ");
+                    else if (array.get(k).toString().charAt(0)=='B')
+                        System.out.print("3, ");
                 }
 
                 System.out.print("0, ");
@@ -624,34 +675,40 @@ public class HarmonyEngine
                         System.out.print("\n");
                 }
             }
-            else if (arg=='0' || arg == '1' || arg =='2')
-            {
+            else{
+                result[counter][0]=0;
                 for (int k=1; k<=3; k++)
                 {
                     if (array.get(k).toString().charAt(0)=='C')
                         result[counter][k]=0;
-                    if (array.get(k).toString().charAt(0)=='E')
+                    else if (array.get(k).toString().charAt(0)=='E')
                         result[counter][k]=1;
-                    if (array.get(k).toString().charAt(0)=='G')
+                    else if (array.get(k).toString().charAt(0)=='G')
                         result[counter][k]=2;
+                    else if (array.get(k).toString().charAt(0)=='B')
+                        result[counter][k]=3;
                 }
-
                 result[counter][4]=1;
-
                 for (int k=5; k<=8; k++)
                 {
                     result[counter][k]=(array.get(k-5).getLetterNum()-array.get(0).getLetterNum() + 1);
                 }
-
             }
 
             counter++;
         }
-        if (arg=='0')
-            extendedRootPosition=result;
-        else if(arg == '1')
-            extendedFirstInversion=result;
 
+
+        switch (arg)
+        {
+            case '0': extendedRootPosition = result; break;
+            case '1': extendedFirstInversion = result; break;
+            case '2': extendedSecondInversion = result; break;
+            case '5': extended7RootPosition = result; break;
+            case '6': extended7FirstInversion = result; break;
+            case '7': extended7SecondInversion = result; break;
+            case '8': extended7ThirdInversion = result; break;
+        }
     }
 
 
@@ -695,7 +752,7 @@ public class HarmonyEngine
                 distance[j][1] = j;
 
                 distance[j][2] = 5; //starting value
-                if (tempNotes[j].getChromaticNumber()<28 || tempNotes[j].getChromaticNumber()>48) //out of bounds
+                if (tempNotes[j].getChromaticNumber()<28 || tempNotes[j].getChromaticNumber()>50) //out of bounds past E2 and D4
                     distance[j][2] = 20;
 
                 if (Math.abs(distance[j][0])<=4) //smaller intervals are key.
@@ -710,8 +767,8 @@ public class HarmonyEngine
                 }
             });
 
-            for (int[] arr : distance)
-                System.out.println(arr[0]+" "+arr[1]+" "+arr[2]);
+            //for (int[] arr : distance)
+                //System.out.println(arr[0]+" "+arr[1]+" "+arr[2]);
 
             int element;
             if (distance[1][2]<5)
@@ -835,46 +892,6 @@ public class HarmonyEngine
         return temp;
     }
 
-
-    /*public int[] makeNLongChordProgression2 (int k, int whichMatrix, int startChord, int endChord) //whichMatrix is 1 or 2 for now
-    {
-        //implementation is to loop until seeing endChord, then check if k length
-
-        int chord=startChord;  //always start with I chord
-
-        String result = "";
-        int counter =1;
-
-        while (counter !=k) //runs for k times
-        {
-            result = "" + chord;
-            do {
-                if (whichMatrix==1)
-                    chord = MajorScale.returnNextProgression(chord);
-                else //if (whichMatrix==2)
-                    chord = MajorScale.returnNextProgression2(chord);
-                result += chord;
-                counter++;
-            } while (chord != endChord);
-
-            if (counter !=k)
-            {
-                counter = 1;
-                result = "";
-                chord=startChord;
-            }
-        }
-        int[] tempProgression = new int[k];
-        for (int i = 0; i<k; ++i)
-        {
-            tempProgression[i]=((int)(result.charAt(i)))-'0';
-
-        }
-        numberOfChords = k;
-        return tempProgression;
-    }*/
-
-
     public Object[] makeProperProgression() // object array of size 3, 0=root, 1=inversions, 2=isSeventh
     {
         //Dynamically sized since progression size is controlled random
@@ -887,7 +904,7 @@ public class HarmonyEngine
         int currentPosition=0;
 
         //tonic harmony, 1-5 times
-        int minForSection = (int)(Math.random()*5)+1;
+        int minForSection = (int)(Math.random()*5+1);
 
         for (int i=0; i< minForSection; ++i)
         {
@@ -912,7 +929,7 @@ public class HarmonyEngine
         }
 
         //predominant harmony, 1-3 times
-        minForSection = (int)(Math.random()*3)+1;
+        minForSection = (int)(Math.random()*3+1);
 
         for (int i=0; i< minForSection; ++i)
         {
@@ -937,7 +954,7 @@ public class HarmonyEngine
         }
 
         //dominant harmony, 1-2 times
-        minForSection = (int)(Math.random()*2)+1;
+        minForSection = (int)(Math.random()*2+1);
 
         for (int i=0; i< minForSection; ++i)
         {
@@ -945,6 +962,11 @@ public class HarmonyEngine
             for (int j=0; j< dominantMatrix.length; ++j)
                 if (dominantMatrix[currentPosition][j]==1)
                     choices.add(j);
+            if (choices.size()==0) {
+                System.out.println(indexToString.get(currentPosition) + " " + minForSection + " " + i);
+                for (String erer: position)
+                    System.out.println(erer+"-");
+            }
             int random = (int)(Math.random()*choices.size());
 
             currentPosition=choices.get(random);
@@ -1027,7 +1049,81 @@ public class HarmonyEngine
             }
             ++index;
         }
-        return new Object[]{root, inv, is7};
+        return new Object[]{root, inv, is7, root.length};
+
+    }
+
+    public boolean buildProperBass()
+    {
+
+        for (int i=0; i<bass.length; ++i)
+            bass[i]=null;
+
+        Pitch[] possiblePitches;
+
+        if (isSeventh[0]==false)
+            possiblePitches = scale.getDiatonicTriad(currentProgression[0]);
+        else //if (isSeventh[0] == true)
+            possiblePitches = scale.getDiatonic7th(currentProgression[0]);
+
+        int octave = (key.chromaticNumber>7?2:3); //Higher than G
+        bass[0] = new Note(possiblePitches[0], octave);
+
+        for (int i=1; i< bass.length; ++i)
+        {
+            if (isSeventh[i]==false)
+                possiblePitches = scale.getDiatonicTriad(currentProgression[i]);
+            else //if (isSeventh[0] == true)
+                possiblePitches = scale.getDiatonic7th(currentProgression[i]);
+
+            Note[] tempNotes = new Note[2];
+            tempNotes[0]=new Note(possiblePitches[inversions[i]], 2);
+            tempNotes[1]=new Note(possiblePitches[inversions[i]], 3);
+
+            //array to be sorted, in the format of nx2 array, {interval, element #}
+            //lower ranking is better
+            int [][] distance = new int[tempNotes.length][2];
+            for (int j=0; j<tempNotes.length; ++j)
+            {
+                distance[j][0]=tempNotes[j].getLetterNum()-bass[i-1].getLetterNum(); //interval distance
+                distance[j][1] = j;
+            }
+            java.util.Arrays.sort(distance, new java.util.Comparator<int[]>() {
+                public int compare(int[] a, int[] b) {
+                    return Integer.compare(Math.abs(a[0]), Math.abs(b[0]));
+                }
+            });
+
+            //for (int[] arr : distance)
+                //System.out.println(arr[0]+" "+arr[1]);
+
+            int element=0;
+            bass[i] = tempNotes[distance[element][1]];
+        }
+
+        //find highest bass to set boundary
+        for (Note note : bass)
+        {
+            if (boundaryBassHigh==null || boundaryBassHigh.getChromaticNumber()<note.getChromaticNumber())
+                boundaryBassHigh=note;
+        }
+
+        for (int i=0; i< bass.length; ++i) //searches for out of bounds, E2 28, D4 50
+        {
+            if (bass[i].getChromaticNumber()<28)
+            {
+                //for (int j=i; j< bass.length; ++j)
+                //    bass[j]=Note.getOctaveHigher(bass[j]);
+                return false;
+            }
+            if (bass[i].getChromaticNumber()>50)
+            {
+                //for (int j=i; j< bass.length; ++j)
+                //    bass[j]=Note.getOctaveLower(bass[j]);
+                return false;
+            }
+        }
+        return true;
 
     }
 
