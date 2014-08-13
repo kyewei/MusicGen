@@ -319,19 +319,39 @@ public class HarmonyEngine
         {
             //Get possible pitches and initialise
             //This diatonically gets minor or major depending on root position
-            Pitch[] possiblePitches = scale.getDiatonicTriad(currentProgression[currentChord]);
+            Pitch[] possiblePitches;
+
             boolean isSuccess;
             Note tempTenor, tempAlto, tempSoprano;
 
             int[][] referenceArray;
-            if (inversions[currentChord] == 0)
-                referenceArray = extendedRootPosition;
-            else //if (inversions[currentChord]==1)
-                referenceArray = extendedFirstInversion;
+
+            if (!isSeventh[currentChord])
+            {
+                switch (inversions[currentChord])
+                {
+                    case 0: referenceArray = extendedRootPosition; break;
+                    case 1: referenceArray = extendedFirstInversion; break;
+                    case 2: referenceArray = extendedSecondInversion; break;
+                    default: referenceArray = extendedRootPosition; break; //will never happen
+                }
+                possiblePitches = scale.getDiatonicTriad(currentProgression[currentChord]);
+            }
+            else
+            {
+                switch (inversions[currentChord])
+                {
+                    case 0: referenceArray = extended7RootPosition; break;
+                    case 1: referenceArray = extended7FirstInversion; break;
+                    case 2: referenceArray = extended7SecondInversion; break;
+                    case 3: referenceArray = extended7ThirdInversion; break;
+                    default: referenceArray = extended7RootPosition; break; //will never happen
+                }
+                possiblePitches = scale.getDiatonic7th(currentProgression[currentChord]);
+            }
 
             if (currentChord==0)
                 referenceArray=arrangements;
-
 
             //Loop getting a random arrangement until one matches criteria
             int startElement = (int) (Math.random() * referenceArray.length);
@@ -470,12 +490,14 @@ public class HarmonyEngine
                 tenor[currentChord] = null;
                 alto[currentChord] = null;
                 soprano[currentChord] = null;
+
+                goPrev();
             } else {
                 tenor[currentChord] = tempTenor;
                 alto[currentChord] = tempAlto;
                 soprano[currentChord] = tempSoprano;
 
-                currentChord++;
+                goNext();
             }
 
         }
