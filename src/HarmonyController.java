@@ -19,6 +19,7 @@ public class HarmonyController
         this.panel=panel;
         this.panel.scorePanel.updateReference(engine.getSoprano(), engine.getAlto(), engine.getTenor(), engine.getBass());
         this.panel.scorePanel.updateCurrentChord(engine.currentChord);
+        this.panel.scorePanel.updateKey(engine.key);
         setupActionListeners();
     }
 
@@ -39,6 +40,7 @@ public class HarmonyController
         panel.parallel8.addActionListener(new MenuAction());
         panel.hidden5.addActionListener(new MenuAction());
         panel.hidden8.addActionListener(new MenuAction());
+        panel.keyThroughSign.addActionListener(new MenuAction());
     }
 
     public class MenuAction extends AbstractAction {
@@ -61,6 +63,42 @@ public class HarmonyController
             else if (e.getSource() == panel.hidden8)
             {
                 engine.checkHiddenOctaves = !engine.checkHiddenOctaves;
+            }
+            else if (e.getSource() == panel.keyThroughSign)
+            {
+                String[] options = {"Cb", "Gb", "Db", "Ab", "Eb", "Bb", "F", "C", "G", "D", "A", "E", "B", "F#", "C#"};
+
+                int result = JOptionPane.showOptionDialog(null,
+                        "What Major Key?",
+                        "Key Changer", 0, JOptionPane.QUESTION_MESSAGE,
+                        null, options, "C");
+                //System.out.println("Answer: "+code);
+                if (result!=-1)
+                {
+                    engine.key = new Pitch(options[result]);
+                    engine.scale = new MajorScale(engine.key);
+                    panel.scorePanel.updateKey(engine.key);
+                    panel.keyInfo.setText(options[result]);
+                    //engine.reset();
+                    engine.currentChord=0;
+                    for (int i=0; i< engine.soprano.length; ++i)
+                    {
+                        engine.soprano[i]=null;
+                        engine.alto[i]=null;
+                        engine.tenor[i]=null;
+                        engine.bass[i]=null;
+                    }
+                    if (!engine.usedProper)
+                        engine.buildBass();
+                    else //if (engine.usedProper)
+                        engine.buildProperBass();
+                    panel.progressionInfo.setText(engine.convertProgressionToRoman());
+
+                }
+                panel.scorePanel.updateCurrentChord(engine.currentChord);
+                panel.scorePanel.updateReference(engine.getSoprano(), engine.getAlto(), engine.getTenor(), engine.getBass());
+
+                mainFrame.repaint();
             }
             else if (e.getSource() == panel.exit)
             {

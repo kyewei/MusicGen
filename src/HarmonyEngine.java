@@ -318,19 +318,19 @@ public class HarmonyEngine
             soprano[i]=null;
         }
 
-        Object[] masterList = new Object[bass.length];
+        ArrayList<ArrayList<Object[]>> masterList = new ArrayList<ArrayList<Object[]>>();
         int[] elementVisited = new int[bass.length];
         boolean isOverallFail = false;
 
         for (currentChord = 0; currentChord< bass.length; ++currentChord)
         {
-            if (masterList[currentChord]==null) //good; we request chord positions that work
+            if (masterList.size()<=currentChord) //good; we request chord positions that work
             {
                 ArrayList<Object[]> result = next();
 
                 if (result.size() > 0) //we got a non-empty list, proceed with scrambling, then pick top one
                 {
-                    masterList[currentChord] = result;
+                    masterList.add(result);
 
                     //scramble
                     Collections.shuffle(result);
@@ -355,7 +355,6 @@ public class HarmonyEngine
                 }
                 else //request returns an empty list
                 {
-                    masterList[currentChord] = null;
                     elementVisited[currentChord] = 0;
                     tenor[currentChord] = null;
                     alto[currentChord] = null;
@@ -363,11 +362,11 @@ public class HarmonyEngine
                     currentChord-=2;
                 }
             }
-            else //if(masterList[currentChord]!=null) //only reason it will not be null is if it is a failed attempt somewhere later
+            else //if(masterList.size()>currentChord) //only reason it will not be null is if it is a failed attempt somewhere later
             {
                 elementVisited[currentChord]++;
 
-                ArrayList<Object[]> result = (ArrayList<Object[]>)(masterList[currentChord]);
+                ArrayList<Object[]> result = masterList.get(currentChord);
                 if (elementVisited[currentChord]<result.size())
                 {
                     //Import list of notes
@@ -388,7 +387,7 @@ public class HarmonyEngine
                 }
                 else //if (elementVisited[currentChord]>=result.size())
                 {
-                    masterList[currentChord] = null;
+                    masterList.remove(masterList.size()-1);
                     elementVisited[currentChord] = 0;
                     tenor[currentChord] = null;
                     alto[currentChord] = null;
@@ -542,7 +541,6 @@ public class HarmonyEngine
                 //what we want is to check every combination of two voices for various properties, effectively a cartesian product
                 // so I don't forget: http://phrogz.net/lazy-cartesian-product
 
-                breakToHere:
                 for (int i = 0; i < 16; ++i)
                 {
                     int first = (i / prev.length) % prev.length;
@@ -559,7 +557,7 @@ public class HarmonyEngine
                             if (prev[first].getChromaticNumber() - now[first].getChromaticNumber() != 0) //unless its the same notes
                             {
                                 isSuccess = false;
-                                break breakToHere;
+                                break;
                             }
                         }
                         if (checkParallelOctaves && (outerInterval % 7 == 0 && outerSemitone % 12 == 0) && (innerInterval % 7 == 0 && innerSemitone % 12 == 0))// No P8 or P1
@@ -567,7 +565,7 @@ public class HarmonyEngine
                             if (prev[first].getChromaticNumber() - now[first].getChromaticNumber() != 0) //unless its the same notes
                             {
                                 isSuccess = false;
-                                break breakToHere;
+                                break;
                             }
                         }
                     }
@@ -879,6 +877,13 @@ public class HarmonyEngine
                 tempNotes[0]=new Note(possiblePitches[1], 2);
                 tempNotes[1]=new Note(possiblePitches[1], 3);
             }
+            if (i==bass.length-1)
+            {
+                tempNotes= new Note[2];
+                tempNotes[0]=new Note(possiblePitches[0], 2);
+                tempNotes[1]=new Note(possiblePitches[0], 3);
+            }
+
 
             //array to be sorted, in the format of nx3 array, {interval, element #, ranking}
             //lower ranking is better
@@ -912,11 +917,13 @@ public class HarmonyEngine
             //keep track of which inversion is used and assign note
             if (currentProgression[i]==7)
                 inversions[i] = 1;
+            else if (i==bass.length-1)
+                inversions[i] = 0;
             else
                 inversions[i]=(distance[element][1]==1||distance[element][1]==3?1:0);
             bass[i] = tempNotes[distance[element][1]];
-        }
 
+        }
 
         //find highest bass to set boundary
         for (Note note : bass)

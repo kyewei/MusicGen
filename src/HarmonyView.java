@@ -140,8 +140,8 @@ public class HarmonyView extends JPanel {
                 textConsole.append(String.valueOf((char) input));
             }
         }); //Anonymous inner class ftw
-        //System.setOut(out);
-        //System.setErr(out);
+        System.setOut(out);
+        System.setErr(out);
 
         JPanel textPanel = new JPanel();
         textPanel.setLayout(new BorderLayout());
@@ -155,7 +155,7 @@ public class HarmonyView extends JPanel {
         createParentFrameAndConnectToIt();
     }
     public JMenuBar menuBar;
-    public JMenuItem export, exit, keyThroughLetterName, keyThroughSign, flipToRelativeKey;
+    public JMenuItem export, exit, /*keyThroughLetterName,*/ keyThroughSign/*, flipToRelativeKey*/;
     public JCheckBoxMenuItem parallel5, parallel8, hidden5, hidden8;
     private void createMenuBar()
     {
@@ -177,12 +177,12 @@ public class HarmonyView extends JPanel {
         //Key Menu
         menu = new JMenu("Key");
         menuBar.add(menu);
-        keyThroughLetterName = new JMenuItem("Select Key through Letter Name");
-        menu.add(keyThroughLetterName);
+        //keyThroughLetterName = new JMenuItem("Select Key through Letter Name");
+        //menu.add(keyThroughLetterName);
         keyThroughSign = new JMenuItem("Select Key through Number of Sharps/Flats");
         menu.add(keyThroughSign);
-        flipToRelativeKey = new JMenuItem("Flip to relative Minor/Major key");
-        menu.add(flipToRelativeKey);
+        //flipToRelativeKey = new JMenuItem("Flip to relative Minor/Major key");
+        //menu.add(flipToRelativeKey);
 
 
         //Harmony Rules Menu
@@ -237,6 +237,7 @@ public class HarmonyView extends JPanel {
         private Note[] tenor;
         private Note[] bass;
         private int currentChord;
+        private Pitch currentKey;
 
         public void updateReference(Note[] soprano, Note[] alto, Note[] tenor, Note[] bass)
         {
@@ -249,6 +250,11 @@ public class HarmonyView extends JPanel {
         public void updateCurrentChord(int num)
         {
             currentChord=num;
+        }
+
+        public void updateKey(Pitch key)
+        {
+            currentKey=key;
         }
 
         public void importFont()
