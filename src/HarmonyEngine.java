@@ -20,6 +20,10 @@ public class HarmonyEngine
         currentProgression = new int[]{1,3,4,5,4,1,5,1};
         buildBass();
 
+        checkParallelFifths=true;
+        checkParallelOctaves=true;
+        checkHiddenFifths=true;
+        checkHiddenOctaves=true;
     }
 
     public void reset()
@@ -58,6 +62,12 @@ public class HarmonyEngine
 
     public boolean usedProper;
 
+    public boolean checkParallelFifths;
+    public boolean checkParallelOctaves;
+    public boolean checkHiddenFifths;
+    public boolean checkHiddenOctaves;
+
+
     public int currentChord;
     public void goPrev()
     {
@@ -70,8 +80,6 @@ public class HarmonyEngine
         if (currentChord<numberOfChords)
             currentChord++;
     }
-
-
 
     public static int[][] arrangements = {
             {0, 2, 1, 0, 0, 1, 5, 11, 15}, //C3, G3, E4, C5
@@ -93,7 +101,6 @@ public class HarmonyEngine
     public static int[][] extended7FirstInversion;
     public static int[][] extended7SecondInversion;
     public static int[][] extended7ThirdInversion;
-
 
     public static int[][] tonicMatrix = new int[][]{
             {0,1,0,1,1,0,1,1,0,1,0,0,0,1,1,1,0,0,0,0,0,1,0,0,1,1,0,1,0,0,0,1,0,0,0,0,0},
@@ -134,7 +141,6 @@ public class HarmonyEngine
             {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
             {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
     };
-
 
 
     public static int[][] predominantMatrix = new int[][]{
@@ -224,7 +230,6 @@ public class HarmonyEngine
     public static int[] dominantEntry;
     public static int[] dominantExit;
 
-
     public static HashMap<String, Integer> stringToIndex = new HashMap<String, Integer>();
     public static HashMap<Integer, String> indexToString = new HashMap<Integer, String>();
 
@@ -296,7 +301,6 @@ public class HarmonyEngine
                 stringToIndex.get("V42")
         };
 
-
         loop('0');
         loop('1');
         loop('2');
@@ -326,6 +330,7 @@ public class HarmonyEngine
 
             int[][] referenceArray;
 
+            //Import list of possible arrangements, depending on chord
             if (!isSeventh[currentChord])
             {
                 switch (inversions[currentChord])
@@ -333,7 +338,7 @@ public class HarmonyEngine
                     case 0: referenceArray = extendedRootPosition; break;
                     case 1: referenceArray = extendedFirstInversion; break;
                     case 2: referenceArray = extendedSecondInversion; break;
-                    default: referenceArray = extendedRootPosition; break; //will never happen
+                    default: System.out.println("Fallthrough"); referenceArray = extendedRootPosition; break;
                 }
                 possiblePitches = scale.getDiatonicTriad(currentProgression[currentChord]);
             }
@@ -345,7 +350,7 @@ public class HarmonyEngine
                     case 1: referenceArray = extended7FirstInversion; break;
                     case 2: referenceArray = extended7SecondInversion; break;
                     case 3: referenceArray = extended7ThirdInversion; break;
-                    default: referenceArray = extended7RootPosition; break; //will never happen
+                    default: System.out.println("Fallthrough"); referenceArray = extended7RootPosition; break;
                 }
                 possiblePitches = scale.getDiatonic7th(currentProgression[currentChord]);
             }
@@ -359,7 +364,6 @@ public class HarmonyEngine
             do {
                 isSuccess = true;
 
-
                 tempTenor = new Note(possiblePitches[referenceArray[counter][1]], (bass[currentChord].getLetterNum() + referenceArray[counter][6] - 1) / 7);
                 tempAlto = new Note(possiblePitches[referenceArray[counter][2]], (bass[currentChord].getLetterNum() + referenceArray[counter][7] - 1) / 7);
                 tempSoprano = new Note(possiblePitches[referenceArray[counter][3]], (bass[currentChord].getLetterNum() + referenceArray[counter][8] - 1) / 7);
@@ -367,53 +371,49 @@ public class HarmonyEngine
                 //increment placed here so that even if breaks occur the value is incremented
                 counter = (counter + 1) % referenceArray.length;
 
-
                 //Boundaries for each voice that cannot be passed
-
                 //Boundaries G4 and C3
                 if (tempTenor.getChromaticNumber() > 55 || tempTenor.getChromaticNumber() < 36) {
                     isSuccess = false;
-                    System.out.println("a"+ counter);
+                    //System.out.println("a"+ counter);
                     continue;
                 }
                 //Boundaries D5 and G3
                 if (tempAlto.getChromaticNumber() > 62 || tempAlto.getChromaticNumber() < 43) {
                     isSuccess = false;
-                    System.out.println("b"+ counter);
+                    //System.out.println("b"+ counter);
                     continue;
                 }
                 //Boundaries A5 and C4
                 if (tempSoprano.getChromaticNumber() > 69 || tempSoprano.getChromaticNumber() < 48) {
                     isSuccess = false;
-                    System.out.println("c"+ counter);
+                    //System.out.println("c"+ counter);
                     continue;
                 }
                 //No crossing
                 if (tempTenor.getChromaticNumber() < boundaryBassHigh.getChromaticNumber()) {
                     isSuccess = false;
-                    System.out.println("d"+ counter);
+                    //System.out.println("d"+ counter);
                     continue;
                 }
                 //Interval between voices can't be too wide
                 if (tempTenor.getChromaticNumber() - bass[currentChord].getChromaticNumber() > 19) {
                     isSuccess = false;
-                    System.out.println("e"+ counter);
+                    //System.out.println("e"+ counter);
                     continue;
                 }
                 if (tempAlto.getChromaticNumber() - tempTenor.getChromaticNumber() > 12) {
                     isSuccess = false;
-                    System.out.println("f"+ counter);
+                    //System.out.println("f"+ counter);
                     continue;
                 }
                 if (tempSoprano.getChromaticNumber() - tempAlto.getChromaticNumber() > 12) {
                     isSuccess = false;
-                    System.out.println("g"+ counter);
+                    //System.out.println("g"+ counter);
                     continue;
                 }
 
-
                 //Harmony rules
-
                 if (currentChord>0) {
 
                     Note[] prev = new Note[4];
@@ -441,21 +441,21 @@ public class HarmonyEngine
                             int innerInterval = Math.abs(now[first].getLetterNum() - now[second].getLetterNum());
                             int innerSemitone = Math.abs(now[first].getChromaticNumber() - now[second].getChromaticNumber());
 
-                            if ((outerInterval % 7 == 4 && outerSemitone % 12 == 7) && (innerInterval % 7 == 4 && innerSemitone % 12 == 7))// No P5
+                            if (checkParallelFifths && (outerInterval % 7 == 4 && outerSemitone % 12 == 7) && (innerInterval % 7 == 4 && innerSemitone % 12 == 7))// No P5
                             {
                                 if (prev[first].getChromaticNumber() - now[first].getChromaticNumber() != 0) //unless its the same notes
                                 {
                                     isSuccess = false;
-                                    System.out.println("h" + counter);
+                                    //System.out.println("h" + counter);
                                     break breakToHere;
                                 }
                             }
-                            if ((outerInterval % 7 == 0 && outerSemitone % 12 == 0) && (innerInterval % 7 == 0 && innerSemitone % 12 == 0))// No P8
+                            if (checkParallelOctaves && (outerInterval % 7 == 0 && outerSemitone % 12 == 0) && (innerInterval % 7 == 0 && innerSemitone % 12 == 0))// No P8 or P1
                             {
                                 if (prev[first].getChromaticNumber() - now[first].getChromaticNumber() != 0) //unless its the same notes
                                 {
                                     isSuccess = false;
-                                    System.out.println("i" + counter);
+                                    //System.out.println("i" + counter);
                                     break breakToHere;
                                 }
                             }
@@ -463,6 +463,35 @@ public class HarmonyEngine
                     }
                     if (!isSuccess)
                         continue;
+
+                    //We also want to check for hidden 5ths or octaves in outer voices.
+                    //This is when outer voices approach a perfect interval in similar motion
+                    //It is not okay if soprano does not move by step to form the perfect interval
+                    if (checkHiddenOctaves && (Math.abs(now[3].getChromaticNumber()-prev[3].getChromaticNumber())%12==0) && (Math.abs(now[3].getLetterNum()-prev[3].getLetterNum())%7==0))
+                    {
+                        int deltaTopInt=now[3].getLetterNum()-prev[3].getLetterNum();
+                        int deltaBottomInt=now[0].getLetterNum()-prev[0].getLetterNum();
+                        if (deltaTopInt*deltaBottomInt*-1 <0) //similar motion
+                        {
+                            if (Math.abs(deltaTopInt)>1) {
+                                isSuccess = false;
+                                continue;
+                            }
+                        }
+                    }
+                    if (checkHiddenFifths && (Math.abs(now[3].getChromaticNumber()-prev[3].getChromaticNumber())%12==7) && (Math.abs(now[3].getLetterNum()-prev[3].getLetterNum())%7 == 4))
+                    {
+                        int deltaTopInt=now[3].getLetterNum()-prev[3].getLetterNum();
+                        int deltaBottomInt=now[0].getLetterNum()-prev[0].getLetterNum();
+                        if (deltaTopInt*deltaBottomInt*-1 <0) //similar motion
+                        {
+                            if (Math.abs(deltaTopInt)>1) {
+                                isSuccess = false;
+                                continue;
+                            }
+                        }
+                    }
+
 
                     //want close intervals between notes of the same part from previous chords
                     if (Math.abs(tempTenor.getChromaticNumber() - tenor[currentChord - 1].getChromaticNumber()) > 4) {//no more than M3
@@ -478,11 +507,7 @@ public class HarmonyEngine
                         continue;
                     }
                     //No parallel octaves
-
                 }
-
-
-
             } while (!isSuccess && startElement != counter);
 
             if (startElement == counter) {
@@ -490,16 +515,13 @@ public class HarmonyEngine
                 tenor[currentChord] = null;
                 alto[currentChord] = null;
                 soprano[currentChord] = null;
-
                 goPrev();
             } else {
                 tenor[currentChord] = tempTenor;
                 alto[currentChord] = tempAlto;
                 soprano[currentChord] = tempSoprano;
-
                 goNext();
             }
-
         }
     }
     public static void loop()
@@ -516,7 +538,6 @@ public class HarmonyEngine
         if (arg =='0'|| arg == '1' || arg == '2')
         {
             notes = new Note[]{new Note("C3"), new Note("E3"), new Note("G3"), new Note("C4"), new Note("E4"), new Note("G4"), new Note("C5"), new Note("E5"), new Note("G5"), new Note("C6"), new Note("E6"), new Note("G6"), new Note("C7")};
-
         }
         else //if (arg =='5' || arg =='6'|| arg=='7'|| arg=='8') and p
         {
@@ -528,15 +549,15 @@ public class HarmonyEngine
 
         ArrayList<ArrayList<Note>> noteList = new ArrayList<ArrayList<Note>>();
 
+        //Uses the fact that binary is either 1 or 0, just like whether a note is either used or not
         for (int i=(!use7?8192:131072); i>=0; --i)
         {
             ArrayList<Note> array = new ArrayList<Note>();
             String text = Integer.toBinaryString(i);
-            while (text.length()<notes.length)
+            while (text.length()<notes.length) //0 padding
             {
                 text = "0"+text;
             }
-            //System.out.println(text);
             for (int j=0; j<text.length(); ++j){
                 if (text.charAt(j)=='1')
                     array.add(notes[j]);
@@ -544,6 +565,8 @@ public class HarmonyEngine
 
             boolean isGood=true;
 
+            //also want to allow for doubling of same note
+            //so when it is length 3, iterate through doubling each one to check
             if (array.size()==3)
             {
                 triplettrack=true;
@@ -639,7 +662,7 @@ public class HarmonyEngine
                             isGood = false;
                     }
                     else if (array.get(0).toString().charAt(0) == 'B') {
-                        if (arg != '7' && arg != 'p')
+                        if (arg != '8' && arg != 'p')
                             isGood = false;
                         if (cCount == 1 && eCount == 1 && gCount == 1 && bCount ==1) {
                         } else
@@ -697,7 +720,7 @@ public class HarmonyEngine
                         System.out.print("\n");
                 }
             }
-            else{
+            else {
                 result[counter][0]=0;
                 for (int k=1; k<=3; k++)
                 {
@@ -716,11 +739,8 @@ public class HarmonyEngine
                     result[counter][k]=(array.get(k-5).getLetterNum()-array.get(0).getLetterNum() + 1);
                 }
             }
-
             counter++;
         }
-
-
         switch (arg)
         {
             case '0': extendedRootPosition = result; break;
@@ -744,7 +764,6 @@ public class HarmonyEngine
         //Has chances of being 3 or 2, but has safeguard so that bass cannot be below E2
         octave = (Math.random()>(0.5)?3:((possiblePitches[0].getChromaticNumber()+ 2 * 12)>=28?2:3));
         bass[0] = new Note(possiblePitches[0], octave);
-
 
         for (int i=1; i< bass.length; ++i)
         {
@@ -781,16 +800,12 @@ public class HarmonyEngine
                     distance[j][2]-=4-Math.abs(distance[j][0]);
 
                 distance[j][2]+=Math.abs(tempNotes[j].getLetterNum()-22)/3; //prefer notes around middle of bass voice
-
             }
             java.util.Arrays.sort(distance, new java.util.Comparator<int[]>() {
                 public int compare(int[] a, int[] b) {
                     return Integer.compare(Math.abs(a[2]), Math.abs(b[2]));
                 }
             });
-
-            //for (int[] arr : distance)
-                //System.out.println(arr[0]+" "+arr[1]+" "+arr[2]);
 
             int element;
             if (distance[1][2]<5)
@@ -813,87 +828,6 @@ public class HarmonyEngine
             if (boundaryBassHigh==null || boundaryBassHigh.getChromaticNumber()<note.getChromaticNumber())
                 boundaryBassHigh=note;
         }
-    }
-
-    public void makeMelody(int whichMatrix) //doesnt work for now
-    {
-        /*
-        //default is to make a 16 note melody, with two phrases of 8 notes each
-        //will use chord progressions to make melody sound nice
-        //first phrase will end on a V, such as a half cadence, and start with I
-        //second phrase will end with VI, and will start with the same note as first phrase's ending note
-
-
-        //initialise and generate progression to follow, and first note
-        int[] phrase1, phrase2;
-        phrase1 = makeNLongChordProgression(8, whichMatrix, 1, 5);
-        phrase2 = makeNLongChordProgression(8, whichMatrix, 1, 1);
-        Note[] melody = new Note[16];
-        Pitch tempPitch = scale.getDiatonicTriad(phrase1[0])[(int)(Math.random()*3)];
-        int octave = tempPitch.letter.getLetterNum()<=2?5:4;// E4 to D5
-        melody[0] = new Note(tempPitch, octave);
-
-        boolean directionUp = Math.random()<0.5;
-
-        for (int i=1; i<16; ++i)
-        {
-            //getting the notes of the chord
-            Pitch[] triad;
-            if (i<8)
-                triad= scale.getDiatonicTriad(phrase1[i]);
-            else //if (i>=8)
-                triad= scale.getDiatonicTriad(phrase2[i-8]);
-
-            int[] intervals = new int[3];
-
-            for (int j =0; j< 3; ++j)
-            {
-                intervals[j] = triad[j].getLetterNum() - melody[i - 1].letter.getLetterNum(); //interval difference
-                if (Math.abs(intervals[j]-7)<Math.abs(intervals[j]))
-                    intervals[j]=intervals[j]-7;
-
-                System.out.println(intervals[j]);
-            }
-            System.out.println("\n");
-            int index=0, distance=10;
-            for (int j =0; j< 3; ++j)
-            {
-                if (Math.abs(intervals[j])< distance && intervals[j]!=0) //find minimum interval, but not allow 0
-                {
-                    distance = Math.abs(intervals[j]);
-                    index = j;
-                }
-            }
-
-            //Making the actual note
-
-
-            melody[i] = new Note(triad[index], octave);
-            //melody[i] = scale.getDiatonicTriad(phrase1[i])[(int)(Math.random()*3)];
-        }
-        System.out.println("\n");
-
-
-        //Note[] sopranoLine = new Note[16];
-        //Add octave and make first note
-        //int octave = melody[0].getLetterNum()<=2?5:4;
-        //sopranoLine[0]=new Note(melody[0], octave);
-
-        //Add nearest note with specified pitch;
-        //for (int i=1; i<16;++i)
-        //{
-
-        //}
-
-        System.out.print(convertProgressionToRoman(phrase1));
-        System.out.println("     "+convertProgressionToRoman(phrase2));
-
-        for (Pitch pitch : melody)
-        {
-            System.out.print(pitch+ "  ");
-        }
-        System.out.print("\n");
-        */
     }
 
     public int[] makeNLongChordProgression(int k, int whichMatrix, int startChord, int endChord)
@@ -1010,7 +944,6 @@ public class HarmonyEngine
         boolean[] is7 = new boolean[position.size()];
 
         int index = 0;
-
         for (String text : position)
         {
             String newText = text.toLowerCase();
@@ -1022,6 +955,7 @@ public class HarmonyEngine
                     break;
                 }
             }
+
             //chord root
             String roman = text.substring(0,split).toLowerCase();
             //thankfully contains only i's and v's
@@ -1035,13 +969,14 @@ public class HarmonyEngine
             else
                 root[index] = roman.length();
 
+            //Chord modifiers
             if (split<newText.length()) {
                 //diminished
                 boolean isDim = text.charAt(split) == '°';
                 if (isDim)
                     split++;
 
-                //chord type
+                //Classifies chord as 7th/not 7th and identifies inversion
                 String modifier = "";
                 if (split < text.length())
                     modifier = text.substring(split);
@@ -1072,18 +1007,16 @@ public class HarmonyEngine
             ++index;
         }
         return new Object[]{root, inv, is7, root.length};
-
     }
 
     public boolean buildProperBass()
     {
-
         for (int i=0; i<bass.length; ++i)
             bass[i]=null;
 
         Pitch[] possiblePitches;
 
-        if (isSeventh[0]==false)
+        if (!isSeventh[0])
             possiblePitches = scale.getDiatonicTriad(currentProgression[0]);
         else //if (isSeventh[0] == true)
             possiblePitches = scale.getDiatonic7th(currentProgression[0]);
@@ -1093,7 +1026,7 @@ public class HarmonyEngine
 
         for (int i=1; i< bass.length; ++i)
         {
-            if (isSeventh[i]==false)
+            if (!isSeventh[i])
                 possiblePitches = scale.getDiatonicTriad(currentProgression[i]);
             else //if (isSeventh[0] == true)
                 possiblePitches = scale.getDiatonic7th(currentProgression[i]);
@@ -1115,9 +1048,6 @@ public class HarmonyEngine
                     return Integer.compare(Math.abs(a[0]), Math.abs(b[0]));
                 }
             });
-
-            //for (int[] arr : distance)
-                //System.out.println(arr[0]+" "+arr[1]);
 
             int element=0;
             bass[i] = tempNotes[distance[element][1]];
@@ -1146,7 +1076,6 @@ public class HarmonyEngine
             }
         }
         return true;
-
     }
 
     public String convertProgressionToRoman()
@@ -1169,14 +1098,15 @@ public class HarmonyEngine
                 case 6: temp+="vi"; break;
                 case 7: temp+="vii°"; break;
             }
-            if (isSeventh[i]==false) {
+            if (!isSeventh[i]) {
                 switch (inversions[i]) {
                     case 0: break;
                     case 1: temp += "6"; break;
                     case 2: temp += "64"; break;
                 }
             }
-            else if (isSeventh[i]==true) {
+            else// if (isSeventh[i])
+            {
                 switch (inversions[i]) {
                     case 0: temp+="7"; break;
                     case 1: temp+="65"; break;
@@ -1185,9 +1115,7 @@ public class HarmonyEngine
                 }
             }
             temp+="-";
-
         }
         return temp.substring(0,temp.length()-1);
     }
-
 }

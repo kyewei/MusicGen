@@ -26,21 +26,47 @@ public class HarmonyController
     {
         panel.button0.addActionListener(new Action("Action", KeyEvent.VK_A));
         panel.button1.addActionListener(new Action());
-        //panel.button2.addActionListener(new Action());
-        //panel.button3.addActionListener(new Action());
-
-        panel.exit.addActionListener(new Action());
 
         panel.makeBass.addActionListener(new Action());
         panel.makeChord.addActionListener(new Action());
         panel.prevButton.addActionListener(new Action());
         panel.nextButton.addActionListener(new Action());
-        //panel.selectUp.addActionListener(new Action());
-        //panel.selectDown.addActionListener(new Action());
         panel.fun.addActionListener(new Action());
 
+        panel.exit.addActionListener(new MenuAction());
+        panel.parallel5.addActionListener(new MenuAction());
+        panel.parallel8.addActionListener(new MenuAction());
+        panel.hidden5.addActionListener(new MenuAction());
+        panel.hidden8.addActionListener(new MenuAction());
     }
 
+    public class MenuAction extends AbstractAction {
+        public MenuAction() { super(); }
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            if (e.getSource() == panel.parallel5)
+            {
+                engine.checkParallelFifths = !engine.checkParallelFifths;
+            }
+            else if (e.getSource() == panel.parallel8)
+            {
+                engine.checkParallelOctaves = !engine.checkParallelOctaves;
+            }
+            else if (e.getSource() == panel.hidden5)
+            {
+                engine.checkHiddenFifths = !engine.checkHiddenFifths;
+            }
+            else if (e.getSource() == panel.hidden8)
+            {
+                engine.checkHiddenOctaves = !engine.checkHiddenOctaves;
+            }
+            else if (e.getSource() == panel.exit)
+            {
+                System.exit(0);
+            }
+        }
+    }
 
     private class Action extends AbstractAction {
 
@@ -53,11 +79,9 @@ public class HarmonyController
             super();
         }
 
-
-
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (e.getSource()==panel.button0 || e.getSource()==panel.button1/* || e.getSource()==panel.button2 || e.getSource()==panel.button3*/)
+            if (e.getSource()==panel.button0 || e.getSource()==panel.button1)
             {
                 engine.reset();
 
@@ -123,31 +147,20 @@ public class HarmonyController
 
                 mainFrame.repaint();
             }
-            else if (e.getSource() ==panel.prevButton)
+            else if (e.getSource()  ==panel.prevButton)
             {
-
                 engine.goPrev();
                 panel.scorePanel.updateCurrentChord(engine.currentChord);
 
                 mainFrame.repaint();
             }
-            else if (e.getSource() ==panel.nextButton)
+            else if (e.getSource() == panel.nextButton)
             {
                 engine.goNext();
                 panel.scorePanel.updateCurrentChord(engine.currentChord);
 
                 mainFrame.repaint();
             }
-            else if (e.getSource() == panel.selectUp)
-            {
-
-            }
-            else if (e.getSource() == panel.selectDown)
-            {
-
-            }
-            else if (e.getSource()==panel.exit)
-                System.exit(0);
 
 
         }

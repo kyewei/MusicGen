@@ -10,30 +10,24 @@ public class Main {
             }
         });
 
-        //Note a = new Note(Note.Letter.G, Note.Accidental.Sharp, 4);
-        //Note b = new Note("G4");
-        //System.out.println(a.equals(b));
-        //System.out.println(a.hashCode());
-        //System.out.println(b.hashCode());
+        //Example usages:
+
+        //Note one = new Note(Note.Letter.G, Note.Accidental.Natural, 4);
+        //Note two = new Note("G4");
+        //assert(a.equals(b));
 
         //Note.Letter test = Note.Letter.A;
-        //System.out.println(Note.Letter.A == Note.Letter.G.getNext());
+        //assert(Note.Letter.A == Note.Letter.G.getNext());
 
-        //System.out.println(Note.getIntervalLower(a, 5, 'P'));
-        //System.out.println(Note.getIntervalHigher(a, 4, 'D'));
+        //assert(Note.getIntervalLower(two, 5, 'P').equals(new Note ("C4")));
+        //assert(Note.getIntervalHigher(a, 4, 'D').equals(new Note ("D4"));
 
         //Pitch[] chordpitches = Chord.getChordPitches("Bdim7");
         //for (Pitch pitch : chordpitches)
-        //    System.out.println (pitch);
+        //    System.out.println (pitch); // B D F Ab
 
-        /*MajorScale workingscale = new MajorScale("Bb");
-        for (Pitch pitch : workingscale.scale)
-            System.out.println (pitch);*/
-
-        //Note test = new Note("A4");
-        //Note test2 = new Note("A3");
-
-        //System.out.println(test.equals(test2));
-        //System.out.println(((Pitch)test).equals(((Pitch)test2)));
+        //MajorScale workingscale = new MajorScale("Bb");
+        //for (Pitch pitch : workingscale.scale)
+        //    System.out.println (pitch); // Bb C D Eb F G A
     }
 }

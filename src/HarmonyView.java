@@ -29,7 +29,7 @@ public class HarmonyView extends JPanel {
         mainFrame.setVisible(true);
     }
 
-    public JButton button0, button1, /*button2, button3, */button4, makeBass, makeChord, nextButton, prevButton, selectUp, selectDown, fun;
+    public JButton button0, button1, button4, makeBass, makeChord, nextButton, prevButton, fun;
     public JLabel keyInfo, progressionInfo, numberOfChordsInfo;
     public JPanel keyPanel, progressionPanel, middlePanel, navigationPanel;
     //public JTextField middleText;
@@ -75,12 +75,8 @@ public class HarmonyView extends JPanel {
         middlePanel.add(new JLabel("Generate Chord Progression Using Matrix: "));
         button0 = new JButton("Complex");
         button1 = new JButton("Simple");
-        //button2 = new JButton("Complex, No Tonic");
-        //button3 = new JButton("Simple, No Tonic");
         middlePanel.add(button0);
         middlePanel.add(button1);
-        //middlePanel.add(button2);
-        //middlePanel.add(button3);
         middlePanel.add(new JLabel(" or "));
         button4 = new JButton("Enter One");
         middlePanel.add(button4);
@@ -98,15 +94,11 @@ public class HarmonyView extends JPanel {
         makeChord = new JButton("Random Chord");
         prevButton = new JButton("Previous");
         nextButton = new JButton("Next");
-        //selectUp = new JButton("Up");
-        //selectDown = new JButton("Down");
         fun = new JButton("FunButton");
         navigationPanel.add(makeBass);
         navigationPanel.add(makeChord);
         navigationPanel.add(prevButton);
         navigationPanel.add(nextButton);
-        //navigationPanel.add(selectUp);
-        //navigationPanel.add(selectDown);
         navigationPanel.add(fun);
 
         navigationPanel.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -117,7 +109,6 @@ public class HarmonyView extends JPanel {
         c.gridy = 3;
         add(navigationPanel, c);
 
-
         //Panel where score is drawn
         scorePanel = new ScorePanel();
         c = new GridBagConstraints();
@@ -126,11 +117,11 @@ public class HarmonyView extends JPanel {
         c.gridy = 3;
         add(scorePanel, c);
 
-
         createParentFrameAndConnectToIt();
     }
     public JMenuBar menuBar;
     public JMenuItem export, exit, keyThroughLetterName, keyThroughSign, flipToRelativeKey;
+    public JCheckBoxMenuItem parallel5, parallel8, hidden5, hidden8;
     private void createMenuBar()
     {
         JMenu menu;
@@ -148,8 +139,6 @@ public class HarmonyView extends JPanel {
         exit = new JMenuItem("Exit", KeyEvent.VK_X);
         menu.add(exit);
 
-
-
         //Key Menu
         menu = new JMenu("Key");
         menuBar.add(menu);
@@ -164,8 +153,18 @@ public class HarmonyView extends JPanel {
         //Harmony Rules Menu
         menu = new JMenu("Rules");
         menuBar.add(menu);
-        cbMenuItem = new JCheckBoxMenuItem("Check for Parallel Fifths");
-        menu.add(cbMenuItem);
+        parallel5 = new JCheckBoxMenuItem("Check for Parallel Fifths");
+        parallel5.setSelected(true);
+        parallel8 = new JCheckBoxMenuItem("Check for Parallel Octaves/Unisons");
+        parallel8.setSelected(true);
+        hidden5 = new JCheckBoxMenuItem("Check for Hidden Fifths in Outer Voices");
+        hidden5.setSelected(true);
+        hidden8 = new JCheckBoxMenuItem("Check for Hidden Octaves/Unisons in Outer Voices");
+        hidden8.setSelected(true);
+        menu.add(parallel5);
+        menu.add(parallel8);
+        menu.add(hidden5);
+        menu.add(hidden8);
     }
 
 
@@ -230,7 +229,6 @@ public class HarmonyView extends JPanel {
                 e.printStackTrace();
             }
         }
-
 
         @Override
         public void paintComponent(Graphics g)
@@ -317,7 +315,6 @@ public class HarmonyView extends JPanel {
                         {
                             for (int j = 0; j < (28 - alto[i].getLetterNum()) / 2 + 1; ++j)
                                 g.fillRect(120 + 48 * i, 218 + 16 * j, 33, 2);
-
                         }
                     }
                     if (tenor[i] != null) {
@@ -334,7 +331,6 @@ public class HarmonyView extends JPanel {
                         {
                             for (int j = 0; j < (16 - bass[i].getLetterNum()) / 2 + 1; ++j)
                                 g.fillRect(120 + 48 * i, 418 + 16 * j, 33, 2);
-
                         }
                     }
                 }
@@ -343,9 +339,4 @@ public class HarmonyView extends JPanel {
 
 
     }
-
-
-
-
-
 }

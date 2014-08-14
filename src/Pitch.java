@@ -79,7 +79,6 @@ public class Pitch
         return result;
     }
 
-
     public enum Accidental
     {
         DoubleFlat ("bb", -2), Flat ("b", -1), Natural ("", 0), Sharp ("#", 1), DoubleSharp ("##", 2);
@@ -148,4 +147,3 @@ public class Pitch
         }
     }
 }
-

@@ -26,7 +26,6 @@ public class MajorScale extends Scale
         return generateSpecificScale(new Pitch(root), new String[]{"P1", "M2", "M3", "P4", "P5", "M6", "M7"});
     }
 
-
     static double[][] chordProgression = {
             {0.002,0.143,0.025,0.309,0.376,0.12,0.025},
             {0.274,0.002,0.04,0.032,0.564,0.04,0.048},
@@ -73,7 +72,6 @@ public class MajorScale extends Scale
                 return i+1;
             probabilityCounter+=chordProgression[currentProgressionDegree][i];
         }
-
         return currentProgressionDegree;
     }
 
@@ -89,7 +87,6 @@ public class MajorScale extends Scale
                 return i+1;
             probabilityCounter+=chordProgression2[currentProgressionDegree][i];
         }
-
         return currentProgressionDegree;
     }
 

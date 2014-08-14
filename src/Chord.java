@@ -82,7 +82,6 @@ public class Chord {
             else //if (chordQuality.equals("maj"))
                 temp[3]=new Pitch(MajorScale.allScales[scaleIndex][6]);
 
-
             //probably missing some more, will complete fully later, right now just using major variants
             if (numberOfNotes>4)
             {
@@ -95,7 +94,6 @@ public class Chord {
                     //stuff for 11th
                     //P4 above root
                     temp[5]=new Pitch(MajorScale.allScales[scaleIndex][3]);
-
 
                     if (numberOfNotes>6)
                     {
