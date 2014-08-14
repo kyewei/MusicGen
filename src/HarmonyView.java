@@ -29,7 +29,7 @@ public class HarmonyView extends JPanel {
         mainFrame.setVisible(true);
     }
 
-    public JButton button0, button1, button4, makeBass, makeChord, nextButton, prevButton, fun;
+    public JButton button0, button1, button2, button4, makeBass, makeChord, nextButton, prevButton, fun;
     public JLabel keyInfo, progressionInfo, numberOfChordsInfo;
     public JPanel keyPanel, progressionPanel, middlePanel, navigationPanel;
     //public JTextField middleText;
@@ -75,8 +75,10 @@ public class HarmonyView extends JPanel {
         middlePanel.add(new JLabel("Generate Chord Progression Using Matrix: "));
         button0 = new JButton("Complex");
         button1 = new JButton("Simple");
+        button2 = new JButton("Proper");
         middlePanel.add(button0);
         middlePanel.add(button1);
+        middlePanel.add(button2);
         middlePanel.add(new JLabel(" or "));
         button4 = new JButton("Enter One");
         middlePanel.add(button4);
@@ -308,6 +310,11 @@ public class HarmonyView extends JPanel {
                             for (int j = 0; j < (soprano[i].getLetterNum() - 40) / 2 + 1; ++j)
                                 g.fillRect(120 + 48 * i, 122 - 16 * j, 33, 2);
                         }
+                        if (soprano[i].getLetterNum() <= 28) //Lower than C4
+                        {
+                            for (int j = 0; j < (28 - soprano[i].getLetterNum()) / 2 + 1; ++j)
+                                g.fillRect(120 + 48 * i, 218 + 16 * j, 33, 2);
+                        }
                     }
                     if (alto[i] != null) {
                         g.drawString("\uD834\uDD5D", 120 + i * 48, alto[i].getLetterNum() * -8 + 432);
@@ -331,6 +338,11 @@ public class HarmonyView extends JPanel {
                         {
                             for (int j = 0; j < (16 - bass[i].getLetterNum()) / 2 + 1; ++j)
                                 g.fillRect(120 + 48 * i, 418 + 16 * j, 33, 2);
+                        }
+                        if (bass[i].getLetterNum() >= 28) //Higher than C4
+                        {
+                            for (int j = 0; j < (bass[i].getLetterNum() - 28) / 2 + 1; ++j)
+                                g.fillRect(120 + 48 * i, 322 - 16 * j, 33, 2);
                         }
                     }
                 }

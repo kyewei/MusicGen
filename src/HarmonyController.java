@@ -26,6 +26,7 @@ public class HarmonyController
     {
         panel.button0.addActionListener(new Action("Action", KeyEvent.VK_A));
         panel.button1.addActionListener(new Action());
+        panel.button2.addActionListener(new Action());
 
         panel.makeBass.addActionListener(new Action());
         panel.makeChord.addActionListener(new Action());
@@ -85,13 +86,40 @@ public class HarmonyController
             {
                 engine.reset();
 
+                int numberOfChords = engine.numberOfChords;
+
                 if (e.getSource()==panel.button0)
-                    engine.currentProgression = engine.makeNLongChordProgression(8, 1, 1, 1);
+                    engine.currentProgression = engine.makeNLongChordProgression(numberOfChords, 1, 1, 1);
                 else if (e.getSource()==panel.button1)
-                    engine.currentProgression = engine.makeNLongChordProgression(8, 2, 1, 1);
+                    engine.currentProgression = engine.makeNLongChordProgression(numberOfChords, 2, 1, 1);
 
                 engine.usedProper=false;
                 engine.buildBass();
+
+                panel.progressionInfo.setText(engine.convertProgressionToRoman());
+                panel.numberOfChordsInfo.setText(""+engine.numberOfChords);
+
+                panel.scorePanel.updateCurrentChord(engine.currentChord);
+                panel.scorePanel.updateReference(engine.getSoprano(), engine.getAlto(), engine.getTenor(), engine.getBass());
+
+                mainFrame.repaint();
+            }
+            else if (e.getSource()==panel.button2)
+            {
+                boolean result;
+                do {
+                    Object[] arrays = engine.makeProperProgression();
+                    engine.numberOfChords = (int)(arrays[3]);
+                    engine.reset();
+                    engine.currentProgression = (int[])(arrays[0]);
+                    engine.inversions = (int[])(arrays[1]);
+                    engine.isSeventh = (boolean[])(arrays[2]);
+
+                    engine.usedProper=true;
+                    result = engine.buildProperBass();
+                }while(!result);
+
+                System.out.println(engine.convertProgressionToRoman());
 
                 panel.progressionInfo.setText(engine.convertProgressionToRoman());
                 panel.numberOfChordsInfo.setText(""+engine.numberOfChords);
@@ -117,34 +145,16 @@ public class HarmonyController
             }
             else if (e.getSource()==panel.makeChord)
             {
-                engine.next();
+                engine.nextDriver();
                 panel.scorePanel.updateCurrentChord(engine.currentChord);
 
                 mainFrame.repaint();
             }
             else if (e.getSource()==panel.fun)
             {
-                boolean result;
-                do {
-                    Object[] arrays = engine.makeProperProgression();
-                    engine.numberOfChords = (int)(arrays[3]);
-                    engine.reset();
-                    engine.currentProgression = (int[])(arrays[0]);
-                    engine.inversions = (int[])(arrays[1]);
-                    engine.isSeventh = (boolean[])(arrays[2]);
-
-                    engine.usedProper=true;
-                    result = engine.buildProperBass();
-                }while(!result);
-
-                System.out.println(engine.convertProgressionToRoman());
-
-                panel.progressionInfo.setText(engine.convertProgressionToRoman());
-                panel.numberOfChordsInfo.setText(""+engine.numberOfChords);
+                engine.doAllTheThings();
 
                 panel.scorePanel.updateCurrentChord(engine.currentChord);
-                panel.scorePanel.updateReference(engine.getSoprano(), engine.getAlto(), engine.getTenor(), engine.getBass());
-
                 mainFrame.repaint();
             }
             else if (e.getSource()  ==panel.prevButton)
