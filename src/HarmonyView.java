@@ -29,11 +29,11 @@ public class HarmonyView extends JPanel {
         mainFrame.setVisible(true);
     }
 
-    public JButton button0, button1, button2, button4, makeBass, makeChord, nextButton, prevButton, fun;
+    public JButton button0, button1, button2, button4, makeBass, makeChord, nextButton, prevButton, completeAll, fun;
     public JLabel keyInfo, progressionInfo, numberOfChordsInfo;
     public JPanel keyPanel, progressionPanel, middlePanel, navigationPanel;
-    //public JTextField middleText;
     public ScorePanel scorePanel;
+    public JTextArea textConsole;
 
     public HarmonyView() //Manage panel customizations
     {
@@ -96,12 +96,14 @@ public class HarmonyView extends JPanel {
         makeChord = new JButton("Random Chord");
         prevButton = new JButton("Previous");
         nextButton = new JButton("Next");
-        fun = new JButton("FunButton");
+        completeAll = new JButton("Solve");
+        //fun = new JButton("FunButton");
         navigationPanel.add(makeBass);
         navigationPanel.add(makeChord);
         navigationPanel.add(prevButton);
         navigationPanel.add(nextButton);
-        navigationPanel.add(fun);
+        navigationPanel.add(completeAll);
+        //navigationPanel.add(fun);
 
         navigationPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         c = new GridBagConstraints();
@@ -114,10 +116,41 @@ public class HarmonyView extends JPanel {
         //Panel where score is drawn
         scorePanel = new ScorePanel();
         c = new GridBagConstraints();
-        c.fill = GridBagConstraints.BOTH;
+        //c.fill = GridBagConstraints.BOTH;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.anchor = GridBagConstraints.PAGE_START;
         c.gridx = 0;
         c.gridy = 3;
         add(scorePanel, c);
+
+        //JTextArea
+        textConsole = new JTextArea(4, 10);
+        JScrollPane scroll = new JScrollPane(textConsole);
+        textConsole.setEditable(false);
+        c = new GridBagConstraints();
+        c.fill = GridBagConstraints.BOTH;
+        c.gridx = 0;
+        c.gridy = 4;
+        //textConsole.append("HI");
+
+        PrintStream out = new PrintStream(new OutputStream()
+        {
+            public void write(int input) throws IOException {
+                // append text to JTextArea as chars
+                textConsole.append(String.valueOf((char) input));
+            }
+        }); //Anonymous inner class ftw
+        //System.setOut(out);
+        //System.setErr(out);
+
+        JPanel textPanel = new JPanel();
+        textPanel.setLayout(new BorderLayout());
+        textPanel.add(scroll, BorderLayout.CENTER);
+        textPanel.setMinimumSize(new Dimension(1024, 200));
+        textPanel.setPreferredSize(new Dimension(1024, 200));
+        textPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+        add(scroll, c);
+
 
         createParentFrameAndConnectToIt();
     }
@@ -176,6 +209,9 @@ public class HarmonyView extends JPanel {
         // \uD834\uDD22 is bass clef
         // \uD834\uDD1A is five-line staff
         // \uD834\uDD5D is whole note
+        // \u266D is flat
+        // \u266E is natural
+        // \u266F is sharp
 
         public ScorePanel()
         {
@@ -186,12 +222,14 @@ public class HarmonyView extends JPanel {
             musicFont2 = new Font("Symbola", Font.PLAIN, 128);
             musicFont3 = new Font("Symbola", Font.PLAIN, 96);
             musicFont4 = new Font("Symbola", Font.PLAIN, 96);
+            musicFont5 = new Font("Symbola", Font.BOLD, 30);
         }
 
         private Font musicFont;
         private Font musicFont2;
         private Font musicFont3;
         private Font musicFont4;
+        private Font musicFont5;
 
         //references for drawing purposes only
         private Note[] soprano;
@@ -233,9 +271,14 @@ public class HarmonyView extends JPanel {
         }
 
         @Override
-        public void paintComponent(Graphics g)
+        public void paintComponent(Graphics g2)
         {
-            super.paintComponent(g);
+            super.paintComponent(g2);
+
+            Graphics2D g = (Graphics2D) g2;
+
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 
             //Graphics2D g2 = (Graphics2D) g;
             //g2.scale(0.75, 0.75);
@@ -268,12 +311,22 @@ public class HarmonyView extends JPanel {
             //Lower clef higher ledger line: x:__ y:322-16n
             //Lower clef lower ledger line: x:__ y:418+16n
 
-
             g.setFont(musicFont4);
 
             drawNotes(g);
 
             g.drawString("^", 120 + 48 * currentChord, 500);
+
+            g.setFont(musicFont5);
+            drawAccidentals(g);
+            for (int i = 0; i<10; ++i) {
+                //g.drawString("\u266D", 40+ 110 + i * 48, 134 + i * 8);
+                //g.drawString("\u266E", 40+ 110 + i * 48, 140 + i * 8);
+                //g.drawString("\u266F", 40+ 110 + i * 48, 140 + i * 8);
+                //g.drawString("\u266D", 40+ 110 + i * 48, 334 + i * 8);
+                //g.drawString("\u266E", 40+ 110 + i * 48, 340 + i * 8);
+                //g.drawString("\u266F", 40+ 110 + i * 48, 340 + i * 8);
+            }
 
             /*for (int i = 0; i< 10; ++i)
                 g.drawString("\uD834\uDD5D", 160+i*40, 120 + i*8);
@@ -296,56 +349,99 @@ public class HarmonyView extends JPanel {
                 g.fillRect(160+80, 402-16*i, 43, 2);
 
             }*/
+
+
+
         }
 
         public void drawNotes(Graphics g) //draws the notes and ledger lines
         {
+            int shift = 40;
             if (soprano.length== alto.length && tenor.length== bass.length && soprano.length ==tenor.length)
             {
                 for (int i=0; i<soprano.length; ++i) {
                     if (soprano[i] != null) {
-                        g.drawString("\uD834\uDD5D", 120 + i * 48, soprano[i].getLetterNum() * -8 + 432);
+                        g.drawString("\uD834\uDD5D", shift+120 + i * 48, soprano[i].getLetterNum() * -8 + 432);
                         if (soprano[i].getLetterNum() >= 40) //Higher than A5
                         {
                             for (int j = 0; j < (soprano[i].getLetterNum() - 40) / 2 + 1; ++j)
-                                g.fillRect(120 + 48 * i, 122 - 16 * j, 33, 2);
+                                g.fillRect(shift+120 + 48 * i, 122 - 16 * j, 33, 2);
                         }
                         if (soprano[i].getLetterNum() <= 28) //Lower than C4
                         {
                             for (int j = 0; j < (28 - soprano[i].getLetterNum()) / 2 + 1; ++j)
-                                g.fillRect(120 + 48 * i, 218 + 16 * j, 33, 2);
+                                g.fillRect(shift+120 + 48 * i, 218 + 16 * j, 33, 2);
                         }
                     }
                     if (alto[i] != null) {
-                        g.drawString("\uD834\uDD5D", 120 + i * 48, alto[i].getLetterNum() * -8 + 432);
+                        g.drawString("\uD834\uDD5D", shift+120 + i * 48, alto[i].getLetterNum() * -8 + 432);
                         if (alto[i].getLetterNum() <= 28) //Lower than C4
                         {
                             for (int j = 0; j < (28 - alto[i].getLetterNum()) / 2 + 1; ++j)
-                                g.fillRect(120 + 48 * i, 218 + 16 * j, 33, 2);
+                                g.fillRect(shift+120 + 48 * i, 218 + 16 * j, 33, 2);
                         }
                     }
                     if (tenor[i] != null) {
-                        g.drawString("\uD834\uDD5D", 120 + i * 48, tenor[i].getLetterNum() * -8 + 536);
+                        g.drawString("\uD834\uDD5D", shift+120 + i * 48, tenor[i].getLetterNum() * -8 + 536);
                         if (tenor[i].getLetterNum() >= 28) //Higher than C4
                         {
                             for (int j = 0; j < (tenor[i].getLetterNum() - 28) / 2 + 1; ++j)
-                                g.fillRect(120 + 48 * i, 322 - 16 * j, 33, 2);
+                                g.fillRect(shift+120 + 48 * i, 322 - 16 * j, 33, 2);
                         }
                     }
                     if (bass[i] != null) {
-                        g.drawString("\uD834\uDD5D", 120 + i * 48, bass[i].getLetterNum() * -8 + 536);
+                        g.drawString("\uD834\uDD5D", shift+120 + i * 48, bass[i].getLetterNum() * -8 + 536);
                         if (bass[i].getLetterNum() <= 16) //Lower than E2
                         {
                             for (int j = 0; j < (16 - bass[i].getLetterNum()) / 2 + 1; ++j)
-                                g.fillRect(120 + 48 * i, 418 + 16 * j, 33, 2);
+                                g.fillRect(shift+120 + 48 * i, 418 + 16 * j, 33, 2);
                         }
                         if (bass[i].getLetterNum() >= 28) //Higher than C4
                         {
                             for (int j = 0; j < (bass[i].getLetterNum() - 28) / 2 + 1; ++j)
-                                g.fillRect(120 + 48 * i, 322 - 16 * j, 33, 2);
+                                g.fillRect(shift+120 + 48 * i, 322 - 16 * j, 33, 2);
                         }
                     }
                 }
+            }
+        }
+
+        public void drawAccidentals(Graphics g)
+        {
+            int shift = 40;
+            if (soprano.length== alto.length && tenor.length== bass.length && soprano.length ==tenor.length)
+            {
+                for (int i=0; i< soprano.length; ++i)
+                {
+                    if (soprano[i]!=null) {
+                        if (soprano[i].accidental == Note.Accidental.Sharp)
+                            g.drawString("\u266F", shift + 110 + i * 48, -8 * soprano[i].getLetterNum() + 452);
+                        else if (soprano[i].accidental == Note.Accidental.Flat)
+                            g.drawString("\u266D", shift + 110 + i * 48, -8 * soprano[i].getLetterNum() + 446);
+                    }
+                    if (alto[i]!=null) {
+                        if (alto[i].accidental == Note.Accidental.Sharp)
+                            g.drawString("\u266F", shift + 110 + i * 48, -8 * alto[i].getLetterNum() + 452);
+                        else if (alto[i].accidental == Note.Accidental.Flat)
+                            g.drawString("\u266D", shift + 110 + i * 48, -8 * alto[i].getLetterNum() + 446);
+                    }
+                }
+                for (int i=0; i< tenor.length; ++i)
+                {
+                    if (tenor[i]!=null) {
+                        if (tenor[i].accidental == Note.Accidental.Sharp)
+                            g.drawString("\u266F", shift + 110 + i * 48, -8 * tenor[i].getLetterNum() + 556);
+                        else if (tenor[i].accidental == Note.Accidental.Flat)
+                            g.drawString("\u266D", shift + 110 + i * 48, -8 * tenor[i].getLetterNum() + 550);
+                    }
+                    if (bass[i]!=null) {
+                        if (bass[i].accidental == Note.Accidental.Sharp)
+                            g.drawString("\u266F", shift + 110 + i * 48, -8 * bass[i].getLetterNum() + 556);
+                        else if (bass[i].accidental == Note.Accidental.Flat)
+                            g.drawString("\u266D", shift + 110 + i * 48, -8 * bass[i].getLetterNum() + 550);
+                    }
+                }
+
             }
         }
 

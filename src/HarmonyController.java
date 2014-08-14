@@ -32,7 +32,7 @@ public class HarmonyController
         panel.makeChord.addActionListener(new Action());
         panel.prevButton.addActionListener(new Action());
         panel.nextButton.addActionListener(new Action());
-        panel.fun.addActionListener(new Action());
+        panel.completeAll.addActionListener(new Action());
 
         panel.exit.addActionListener(new MenuAction());
         panel.parallel5.addActionListener(new MenuAction());
@@ -73,7 +73,7 @@ public class HarmonyController
 
         public Action(String name, Integer mnemonic) {
             super(name);
-            //putValue(MNEMONIC_KEY, mnemonic);
+            putValue(MNEMONIC_KEY, mnemonic);
         }
         public Action()
         {
@@ -119,8 +119,6 @@ public class HarmonyController
                     result = engine.buildProperBass();
                 }while(!result);
 
-                System.out.println(engine.convertProgressionToRoman());
-
                 panel.progressionInfo.setText(engine.convertProgressionToRoman());
                 panel.numberOfChordsInfo.setText(""+engine.numberOfChords);
 
@@ -150,7 +148,7 @@ public class HarmonyController
 
                 mainFrame.repaint();
             }
-            else if (e.getSource()==panel.fun)
+            else if (e.getSource()==panel.completeAll)
             {
                 engine.doAllTheThings();
 

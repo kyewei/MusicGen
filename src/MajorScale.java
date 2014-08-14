@@ -65,7 +65,6 @@ public class MajorScale extends Scale
         currentProgressionDegree-=1; //array start at 0
         double random = Math.random();
         double probabilityCounter = 0;
-        //System.out.println(random);
         for (int i=0; i< chordProgression[currentProgressionDegree].length; ++i)
         {
             if (probabilityCounter <= random && random < probabilityCounter + chordProgression[currentProgressionDegree][i])
@@ -80,7 +79,6 @@ public class MajorScale extends Scale
         currentProgressionDegree-=1; //array start at 0
         double random = Math.random();
         double probabilityCounter = 0;
-        //System.out.println(random);
         for (int i=0; i< chordProgression2[currentProgressionDegree].length; ++i)
         {
             if (probabilityCounter <= random && random < probabilityCounter + chordProgression2[currentProgressionDegree][i])
