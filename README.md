@@ -12,7 +12,7 @@ My idea was to first generate an appropriate functional chord progression. The p
 
 I had brainstormed many ways to potentially do this. My implementation includes:
 
-* Chaining through a schochastic matrix, specifically a Markov Chain
+* Chaining through a stochastic matrix, specifically a Markov Chain
     * Discrete probabilities would be provided
     * Probabilities could give interesting steady-states 
     * Numbers would come from published analysis (there are many articles online analysing chord progressions in classical and modern music)
@@ -21,7 +21,7 @@ I had brainstormed many ways to potentially do this. My implementation includes:
     * Wouldn't have probabilities (too subjective)
     * Compiled through my own work
     * Used adjacency matrices to show paths to and from a chord
-    * More variation of diatonic chord positions (root, inversions), qualities (major, minor, dimished, etc) and types (triads, 7ths, etc)
+    * More variation of diatonic chord positions (root, inversions), qualities (major, minor, diminished, etc) and types (triads, 7ths, etc)
     * Actually had the added effect of being able to generate appropriate passing chords and suspensions, which was a plus
     * I designed the matrices with root movement in mind
 
@@ -32,8 +32,8 @@ In the end, I would say that the second option was a lot more successful, in tha
 ##Rundown of Features
 
 * Can specify key (only major for now) piece is generated in
-* Choice between schochastic matrix and tonic-predominant-dominant matrix
-* Autocompletes entire 4 voicings
+* Choice between stochastic matrix and tonic-predominant-dominant matrix
+* Auto-completes entire 4 voicings
 * Able to select which rules of harmony to follow
 * Can also identify intervals, make scales in natural and single sharp/flat keys (this needed to exist for the rest to work)
 
@@ -46,10 +46,10 @@ In the end, I would say that the second option was a lot more successful, in tha
 * Bass within E2 and D4
 * Soprano, alto, tenor cannot be more than one octave apart
 * Bass and tenor cannot be more than Perfect 12 apart
-* No parallel octaves/unison (toggleable)
-* No parallel fifths (toggleable)
-* No hidden octaves/unison (toggleable)
-* No hidden fifths (toggleable)
+* No parallel octaves/unison (toggle-able)
+* No parallel fifths (toggle-able)
+* No hidden octaves/unison (toggle-able)
+* No hidden fifths (toggle-able)
 
 
 ##Features in the (Near?) Future
