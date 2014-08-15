@@ -63,6 +63,18 @@ public class Note extends Pitch //extension of Pitch with octave property
         return result;
     }
 
+    public String printForLilypondAbsolute ()
+    {
+        String str = ""+letter.toString().toLowerCase();
+        if (accidental == Accidental.Sharp)
+            str +="is";
+        else if (accidental == Accidental.Flat)
+            str +="es";
+        if (octave-3 !=0)
+            str += new String(new char[Math.abs(octave-3)]).replace("\0", (octave-3>0?"'":","));
+        return str;
+    }
+
     public static Note getOctaveLower (Note a){ return new Note(a.letter, a.accidental, a.octave-1); }
     public static Note getOctaveHigher(Note a){ return new Note(a.letter, a.accidental, a.octave+1); }
 

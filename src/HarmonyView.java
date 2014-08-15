@@ -34,6 +34,7 @@ public class HarmonyView extends JPanel {
     public JPanel keyPanel, progressionPanel, middlePanel, navigationPanel;
     public ScorePanel scorePanel;
     public JTextArea textConsole;
+    public JFileChooser fc;
 
     public HarmonyView() //Manage panel customizations
     {
@@ -151,6 +152,7 @@ public class HarmonyView extends JPanel {
         textPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         add(scroll, c);
 
+        fc = new JFileChooser();
 
         createParentFrameAndConnectToIt();
     }
@@ -208,7 +210,8 @@ public class HarmonyView extends JPanel {
         // \uD834\uDD1E is Treble clef
         // \uD834\uDD22 is bass clef
         // \uD834\uDD1A is five-line staff
-        // \uD834\uDD5D is whole note
+        // \uD834\uDD5D is whole note head
+        // \uD834\uDD58 is regular note head
         // \u266D is flat
         // \u266E is natural
         // \u266F is sharp
@@ -363,49 +366,56 @@ public class HarmonyView extends JPanel {
         public void drawNotes(Graphics g) //draws the notes and ledger lines
         {
             int shift = 40;
+
+            //String note = "\uD834\uDD5D";
+            String note = "\uD834\uDD58";
+
+            //int ledger = 33;
+            int ledger = 26;
+
             if (soprano.length== alto.length && tenor.length== bass.length && soprano.length ==tenor.length)
             {
                 for (int i=0; i<soprano.length; ++i) {
                     if (soprano[i] != null) {
-                        g.drawString("\uD834\uDD5D", shift+120 + i * 48, soprano[i].getLetterNum() * -8 + 432);
+                        g.drawString(note, shift+120 + i * 48, soprano[i].getLetterNum() * -8 + 432);
                         if (soprano[i].getLetterNum() >= 40) //Higher than A5
                         {
                             for (int j = 0; j < (soprano[i].getLetterNum() - 40) / 2 + 1; ++j)
-                                g.fillRect(shift+120 + 48 * i, 122 - 16 * j, 33, 2);
+                                g.fillRect(shift+120 + 48 * i, 122 - 16 * j, ledger, 2);
                         }
                         if (soprano[i].getLetterNum() <= 28) //Lower than C4
                         {
                             for (int j = 0; j < (28 - soprano[i].getLetterNum()) / 2 + 1; ++j)
-                                g.fillRect(shift+120 + 48 * i, 218 + 16 * j, 33, 2);
+                                g.fillRect(shift+120 + 48 * i, 218 + 16 * j, ledger, 2);
                         }
                     }
                     if (alto[i] != null) {
-                        g.drawString("\uD834\uDD5D", shift+120 + i * 48, alto[i].getLetterNum() * -8 + 432);
+                        g.drawString(note, shift+120 + i * 48, alto[i].getLetterNum() * -8 + 432);
                         if (alto[i].getLetterNum() <= 28) //Lower than C4
                         {
                             for (int j = 0; j < (28 - alto[i].getLetterNum()) / 2 + 1; ++j)
-                                g.fillRect(shift+120 + 48 * i, 218 + 16 * j, 33, 2);
+                                g.fillRect(shift+120 + 48 * i, 218 + 16 * j, ledger, 2);
                         }
                     }
                     if (tenor[i] != null) {
-                        g.drawString("\uD834\uDD5D", shift+120 + i * 48, tenor[i].getLetterNum() * -8 + 536);
+                        g.drawString(note, shift+120 + i * 48, tenor[i].getLetterNum() * -8 + 536);
                         if (tenor[i].getLetterNum() >= 28) //Higher than C4
                         {
                             for (int j = 0; j < (tenor[i].getLetterNum() - 28) / 2 + 1; ++j)
-                                g.fillRect(shift+120 + 48 * i, 322 - 16 * j, 33, 2);
+                                g.fillRect(shift+120 + 48 * i, 322 - 16 * j, ledger, 2);
                         }
                     }
                     if (bass[i] != null) {
-                        g.drawString("\uD834\uDD5D", shift+120 + i * 48, bass[i].getLetterNum() * -8 + 536);
+                        g.drawString(note, shift+120 + i * 48, bass[i].getLetterNum() * -8 + 536);
                         if (bass[i].getLetterNum() <= 16) //Lower than E2
                         {
                             for (int j = 0; j < (16 - bass[i].getLetterNum()) / 2 + 1; ++j)
-                                g.fillRect(shift+120 + 48 * i, 418 + 16 * j, 33, 2);
+                                g.fillRect(shift+120 + 48 * i, 418 + 16 * j, ledger, 2);
                         }
                         if (bass[i].getLetterNum() >= 28) //Higher than C4
                         {
                             for (int j = 0; j < (bass[i].getLetterNum() - 28) / 2 + 1; ++j)
-                                g.fillRect(shift+120 + 48 * i, 322 - 16 * j, 33, 2);
+                                g.fillRect(shift+120 + 48 * i, 322 - 16 * j, ledger, 2);
                         }
                     }
                 }

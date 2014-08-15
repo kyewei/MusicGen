@@ -60,6 +60,16 @@ public class Pitch
         return ""+letter+accidental;
     }
 
+    public String printForLilypondAbsolute ()
+    {
+        String str = ""+letter.toString().toLowerCase();
+        if (accidental == Accidental.Sharp)
+            str +="is";
+        else if (accidental == Accidental.Flat)
+            str +="es";
+        return str;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
