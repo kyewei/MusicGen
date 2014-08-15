@@ -76,7 +76,7 @@ public class HarmonyView extends JPanel {
         middlePanel.add(new JLabel("Generate Chord Progression Using Matrix: "));
         button0 = new JButton("Complex");
         button1 = new JButton("Simple");
-        button2 = new JButton("Proper");
+        button2 = new JButton("T-P-D");
         middlePanel.add(button0);
         middlePanel.add(button1);
         middlePanel.add(button2);
@@ -324,18 +324,18 @@ public class HarmonyView extends JPanel {
 
             drawNotes(g);
 
-            g.drawString("^", 120 + 48 * currentChord, 500);
+            g.drawString("^", 152 + 48 * currentChord, 550);
 
             g.setFont(musicFont5);
             drawAccidentals(g);
-            for (int i = 0; i<10; ++i) {
+            //for (int i = 0; i<10; ++i) {
                 //g.drawString("\u266D", 40+ 110 + i * 48, 134 + i * 8);
                 //g.drawString("\u266E", 40+ 110 + i * 48, 140 + i * 8);
                 //g.drawString("\u266F", 40+ 110 + i * 48, 140 + i * 8);
                 //g.drawString("\u266D", 40+ 110 + i * 48, 334 + i * 8);
                 //g.drawString("\u266E", 40+ 110 + i * 48, 340 + i * 8);
                 //g.drawString("\u266F", 40+ 110 + i * 48, 340 + i * 8);
-            }
+            //}
 
             /*for (int i = 0; i< 10; ++i)
                 g.drawString("\uD834\uDD5D", 160+i*40, 120 + i*8);
@@ -373,11 +373,14 @@ public class HarmonyView extends JPanel {
             //int ledger = 33;
             int ledger = 26;
 
+            int stickLen = 50;
+
             if (soprano.length== alto.length && tenor.length== bass.length && soprano.length ==tenor.length)
             {
                 for (int i=0; i<soprano.length; ++i) {
                     if (soprano[i] != null) {
                         g.drawString(note, shift+120 + i * 48, soprano[i].getLetterNum() * -8 + 432);
+                        g.fillRect(shift+141+48*i, 122-8*(soprano[i].getLetterNum() - 40)-stickLen+1, 2,  stickLen);
                         if (soprano[i].getLetterNum() >= 40) //Higher than A5
                         {
                             for (int j = 0; j < (soprano[i].getLetterNum() - 40) / 2 + 1; ++j)
@@ -391,6 +394,7 @@ public class HarmonyView extends JPanel {
                     }
                     if (alto[i] != null) {
                         g.drawString(note, shift+120 + i * 48, alto[i].getLetterNum() * -8 + 432);
+                        g.fillRect(shift+123+48*i, 218-8*(alto[i].getLetterNum() - 28), 2,  stickLen);
                         if (alto[i].getLetterNum() <= 28) //Lower than C4
                         {
                             for (int j = 0; j < (28 - alto[i].getLetterNum()) / 2 + 1; ++j)
@@ -399,6 +403,7 @@ public class HarmonyView extends JPanel {
                     }
                     if (tenor[i] != null) {
                         g.drawString(note, shift+120 + i * 48, tenor[i].getLetterNum() * -8 + 536);
+                        g.fillRect(shift+141+48*i, 322-8*(tenor[i].getLetterNum() - 28)-stickLen+1, 2,  stickLen);
                         if (tenor[i].getLetterNum() >= 28) //Higher than C4
                         {
                             for (int j = 0; j < (tenor[i].getLetterNum() - 28) / 2 + 1; ++j)
@@ -407,6 +412,7 @@ public class HarmonyView extends JPanel {
                     }
                     if (bass[i] != null) {
                         g.drawString(note, shift+120 + i * 48, bass[i].getLetterNum() * -8 + 536);
+                        g.fillRect(shift+123+48*i, 418-8*(bass[i].getLetterNum() - 16), 2,  stickLen);
                         if (bass[i].getLetterNum() <= 16) //Lower than E2
                         {
                             for (int j = 0; j < (16 - bass[i].getLetterNum()) / 2 + 1; ++j)
