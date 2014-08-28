@@ -1,3 +1,5 @@
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.*;
 
 /**
@@ -99,126 +101,9 @@ public class HarmonyEngine
     public static int[][] extended7SecondInversion;
     public static int[][] extended7ThirdInversion;
 
-    public static int[][] tonicMatrix = new int[][]{
-            {0,1,0,1,1,0,1,1,0,1,0,0,0,1,1,1,0,0,0,0,0,1,0,0,1,1,0,1,0,0,0,1,0,0,0,0,0},
-            {0,0,0,0,1,0,0,1,0,0,0,0,0,1,0,0,1,0,0,0,0,1,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,1,1,0,0,0,0,1,0,0,0,0,0},
-            {0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,1,1,0,0,0,0,1,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,1,1,0,1,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
-    };
-
-
-    public static int[][] predominantMatrix = new int[][]{
-            {0,0,0,1,1,0,1,1,0,0,0,0,0,1,1,0,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0},
-            {0,0,0,1,1,0,1,1,0,0,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,1,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,1,1,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,1,1,1,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,1,1,1,1,0,1,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,1,0,1,0,0,1,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,1,0,1,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,1,1,0,1,1,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
-    };
-
-    public static int[][] dominantMatrix = new int[][]{
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
-    };
+    public static int[][] tonicMatrix;
+    public static int[][] predominantMatrix;
+    public static int[][] dominantMatrix;
 
     public static int[] tonicEntry;
     public static int[] tonicExit;
@@ -231,72 +116,110 @@ public class HarmonyEngine
     public static HashMap<Integer, String> indexToString = new HashMap<Integer, String>();
 
     static {
-        indexToString.put(0,"I");
-        indexToString.put(1,"I6");
-        indexToString.put(2,"I64");
-        indexToString.put(3,"ii");
-        indexToString.put(4,"ii6");
-        indexToString.put(5,"ii64");
-        indexToString.put(6,"ii7");
-        indexToString.put(7,"ii65");
-        indexToString.put(8,"ii43");
-        indexToString.put(9,"ii42");
-        indexToString.put(10,"iii");
-        indexToString.put(11,"iii6");
-        indexToString.put(12,"iii64");
-        indexToString.put(13,"IV");
-        indexToString.put(14,"IV6");
-        indexToString.put(15,"IV64");
-        indexToString.put(16,"IV7");
-        indexToString.put(17,"IV65");
-        indexToString.put(18,"IV43");
-        indexToString.put(19,"IV42");
-        indexToString.put(20,"V");
-        indexToString.put(21,"V6");
-        indexToString.put(22,"V64");
-        indexToString.put(23,"V7");
-        indexToString.put(24,"V65");
-        indexToString.put(25,"V43");
-        indexToString.put(26,"V42");
-        indexToString.put(27,"vi");
-        indexToString.put(28,"vi6");
-        indexToString.put(29,"vi64");
-        indexToString.put(30,"vii°");
-        indexToString.put(31,"vii°6");
-        indexToString.put(32,"vii°64");
-        indexToString.put(33,"vii°7");
-        indexToString.put(34,"vii°65");
-        indexToString.put(35,"vii°43");
-        indexToString.put(36,"vii°42");
 
-        for (Map.Entry<Integer, String> entry : indexToString.entrySet())
-            stringToIndex.put(entry.getValue(), entry.getKey());
+        String tonicCsv = "src/Matrixes/Tonic.csv";
+        String predominantCsv = "src/Matrixes/Predominant.csv";
+        String dominantCsv = "src/Matrixes/Dominant.csv";
 
-        tonicEntry = new int[] { (int)stringToIndex.get("I") };
-        tonicExit = new int[] {
-                stringToIndex.get("I"),
-                stringToIndex.get("I6")
-        };
-        predominantEntry = tonicExit;
-        predominantExit = new int[] {
-                stringToIndex.get("ii"),
-                stringToIndex.get("ii6"),
-                stringToIndex.get("ii7"),
-                stringToIndex.get("ii65"),
-                stringToIndex.get("ii43"),
-                stringToIndex.get("IV"),
-                stringToIndex.get("IV6"),
-                stringToIndex.get("IV7"),
-                stringToIndex.get("vi")
-        };
-        dominantEntry=predominantExit;
-        dominantExit = new int[] {
-                stringToIndex.get("V"),
-                stringToIndex.get("V7"),
-                stringToIndex.get("V65"),
-                stringToIndex.get("V43"),
-                stringToIndex.get("V42")
-        };
+        //Simple csv parser, knowing that there are no edge cases in provided files
+        //Files are comma delimited, with CRLF \r\n line breaks, values are
+        //numbers, letters, "-", and "°"
+
+        int combinationCount = 0;
+
+        for (int k = 0; k<3; ++k)
+        {
+            try {
+                File file;
+                if (k==0){
+                    file = new File(tonicCsv);
+                } else if (k==1) {
+                    file = new File(predominantCsv);
+                } else {//if (k==2)
+                    file = new File(dominantCsv);
+                }
+
+                Scanner scanner = new Scanner(file);
+                int counter = -1;
+
+                while (scanner.hasNext() && counter< combinationCount+4) {
+                    String input = scanner.next();
+                    String[] split = input.split(",");
+
+                    if (counter==-1 && k==0) {
+                        combinationCount = split.length-1;
+                        for (int i=0; i<combinationCount; ++i)
+                            indexToString.put(i, split[i+1]);
+
+                        for (Map.Entry<Integer, String> entry : indexToString.entrySet())
+                            stringToIndex.put(entry.getValue(), entry.getKey());
+
+                        tonicMatrix = new int[combinationCount][combinationCount];
+                        predominantMatrix = new int[combinationCount][combinationCount];
+                        dominantMatrix = new int[combinationCount][combinationCount];
+                        tonicEntry = new int[combinationCount];
+                        predominantEntry = new int[combinationCount];
+                        dominantEntry = new int[combinationCount];
+                        tonicExit = new int[combinationCount];
+                        predominantExit = new int[combinationCount];
+                        dominantExit = new int[combinationCount];
+                    }
+                    else if (counter>=0 && counter<=combinationCount-1) {
+                        if (split[0].equals(indexToString.get(counter)))//check
+                            for (int i=1; i<split.length; ++i)
+                            {
+                                if (k==0)
+                                    tonicMatrix[counter][i-1] = (split[i].equals("x")?1:0);
+                                else if (k==1)
+                                    predominantMatrix[counter][i-1] = (split[i].equals("x")?1:0);
+                                else //if (k==2)
+                                    dominantMatrix[counter][i-1] = (split[i].equals("x")?1:0);
+                            }
+                    }
+                    else if (counter==combinationCount+2) {
+                        if (split[0].equals("Entry"))//check
+                        {
+                            for (int i=1; i<split.length; ++i)
+                            {
+                                if (k==0) {
+                                        tonicEntry[i-1] = (split[i].equals("x")?1:0);
+                                } else if (k==1){
+                                        predominantEntry[i-1] = (split[i].equals("x")?1:0);
+                                } else {//(k==2)
+                                        dominantEntry[i-1] = (split[i].equals("x")?1:0);
+                                }
+                            }
+                        }
+                    }
+                    else if (counter==combinationCount+3)
+                    {
+                        if (split[0].equals("Exit"))//check
+                        {
+                            for (int i=1; i<split.length; ++i)
+                            {
+                                if (k==0) {
+                                    tonicExit[i-1] = (split[i].equals("x")?1:0);
+                                } else if (k==1){
+                                        predominantExit[i-1] = (split[i].equals("x")?1:0);
+                                } else {//(k==2)
+                                        dominantExit[i-1] = (split[i].equals("x")?1:0);
+                                }
+                            }
+                        }
+                    }
+                    counter++;
+                }
+                scanner.close();
+            } catch (FileNotFoundException e) {
+                //e.printStackTrace();
+                if (k==0)
+                    System.err.println("TonicCSV not found");
+                else if (k==1)
+                    System.err.println("PredominantCSV not found");
+                else //if (k==2)
+                    System.err.println("DominantCSV not found");
+            }
+        }
 
         loop('0');
         loop('1');
@@ -403,7 +326,7 @@ public class HarmonyEngine
         }
         if (isOverallFail)
         {
-            System.out.println("No good combination at all");
+            System.out.println("Surprisingly, you generated a progression with no good voice leading. Better luck next time.");
         }
     }
 
@@ -981,13 +904,10 @@ public class HarmonyEngine
             currentPosition=choices.get(random);
             position.add(indexToString.get(choices.get(random)));
 
-            if (i==minForSection-1) {
+            if (i==minForSection-1) { //check if last one is valid exit chord
                 i--;
-                for (int k : tonicExit) {
-                    if (k == stringToIndex.get(position.get(position.size() - 1))) {
-                        i++;
-                    }
-                }
+                if (tonicExit[stringToIndex.get(position.get(position.size() - 1))]==1)
+                    i++;
             }
         }
 
@@ -1010,13 +930,10 @@ public class HarmonyEngine
             currentPosition=choices.get(random);
             position.add(indexToString.get(choices.get(random)));
 
-            if (i==minForSection-1) {
+            if (i==minForSection-1) { //check if last one is valid exit chord
                 i--;
-                for (int k : predominantExit) {
-                    if (k == stringToIndex.get(position.get(position.size() - 1))) {
-                        i++;
-                    }
-                }
+                if (predominantExit[stringToIndex.get(position.get(position.size() - 1))]==1)
+                    i++;
             }
         }
 
@@ -1039,13 +956,10 @@ public class HarmonyEngine
             currentPosition=choices.get(random);
             position.add(indexToString.get(choices.get(random)));
 
-            if (i==minForSection-1) {
+            if (i==minForSection-1) { //check if last one is valid exit chord
                 i--;
-                for (int k : dominantExit) {
-                    if (k == stringToIndex.get(position.get(position.size() - 1))) {
-                        i++;
-                    }
-                }
+                if (dominantExit[stringToIndex.get(position.get(position.size() - 1))]==1)
+                    i++;
             }
         }
         position.add("I");
@@ -1057,64 +971,10 @@ public class HarmonyEngine
         int index = 0;
         for (String text : position)
         {
-            String newText = text.toLowerCase();
-            int split = newText.length();
-            for (int end = 0; end<newText.length(); ++end)
-            {
-                if (newText.charAt(end)!='v' && newText.charAt(end)!='i'){
-                    split=end;
-                    break;
-                }
-            }
-
-            //chord root
-            String roman = text.substring(0,split).toLowerCase();
-            //thankfully contains only i's and v's
-            if (roman.contains("v"))
-            {
-                if (roman.charAt(0)=='v')
-                    root[index] = 5 + roman.length()-1;
-                else //if (roman.charAt(roman.length()-1)=='v')
-                    root[index] = 5-(roman.length()-1);
-            }
-            else
-                root[index] = roman.length();
-
-            //Chord modifiers
-            if (split<newText.length()) {
-                //diminished
-                boolean isDim = text.charAt(split) == '°';
-                if (isDim)
-                    split++;
-
-                //Classifies chord as 7th/not 7th and identifies inversion
-                String modifier = "";
-                if (split < text.length())
-                    modifier = text.substring(split);
-                else {
-                    is7[index] = false;
-                    inv[index] = 0;
-                }
-
-                if (modifier.equals("") || modifier.equals("6") || modifier.equals("64")) {
-                    is7[index] = false;
-                    if (modifier.equals("6"))
-                        inv[index] = 1;
-                    else if (modifier.equals("64"))
-                        inv[index] = 2;
-                } else //if (modifier == "7" || modifier == "65" || modifier =="43" || modifier =="42")
-                {
-                    is7[index] = true;
-                    if (modifier.equals("7"))
-                        inv[index] = 0;
-                    else if (modifier.equals("65"))
-                        inv[index] = 1;
-                    else if (modifier.equals("43"))
-                        inv[index] = 2;
-                    else if (modifier.equals("42"))
-                        inv[index] = 3;
-                }
-            }
+            int[] temp = recognizeFunctionalChordSymbol(text);
+            root[index] = temp[0];
+            inv[index] = temp[1];
+            is7[index] = temp[2]==1;
             ++index;
         }
         return new Object[]{root, inv, is7, root.length};
@@ -1229,5 +1089,77 @@ public class HarmonyEngine
             temp+="-";
         }
         return temp.substring(0,temp.length()-1);
+    }
+    public int[] recognizeFunctionalChordSymbol(String text)
+    {
+        //returns an int[] array to hold int and boolean values
+        //element 0: root
+        //element 1: inv
+        //element 2: (is7?1:0)
+
+        int root=0;
+        int inv=0;
+        boolean is7=false;
+
+        String newText = text.toLowerCase();
+        int split = newText.length();
+        for (int end = 0; end<newText.length(); ++end)
+        {
+            if (newText.charAt(end)!='v' && newText.charAt(end)!='i'){
+                split=end;
+                break;
+            }
+        }
+
+        //chord root
+        String roman = text.substring(0,split).toLowerCase();
+        //thankfully contains only i's and v's
+        if (roman.contains("v"))
+        {
+            if (roman.charAt(0)=='v')
+                root = 5 + roman.length()-1;
+            else //if (roman.charAt(roman.length()-1)=='v')
+                root = 5-(roman.length()-1);
+        }
+        else
+            root = roman.length();
+
+        //Chord modifiers
+        if (split<newText.length()) {
+            //diminished
+            boolean isDim = text.charAt(split) == '°';
+            if (isDim)
+                split++;
+
+            //Classifies chord as 7th/not 7th and identifies inversion
+            String modifier = "";
+            if (split < text.length())
+                modifier = text.substring(split);
+            else {
+                is7 = false;
+                inv = 0;
+            }
+
+            if (modifier.equals("") || modifier.equals("6") || modifier.equals("64")) {
+                is7 = false;
+                if (modifier.equals("6"))
+                    inv = 1;
+                else if (modifier.equals("64"))
+                    inv = 2;
+            } else //if (modifier == "7" || modifier == "65" || modifier =="43" || modifier =="42")
+            {
+                is7 = true;
+                if (modifier.equals("7"))
+                    inv = 0;
+                else if (modifier.equals("65"))
+                    inv = 1;
+                else if (modifier.equals("43"))
+                    inv = 2;
+                else if (modifier.equals("42"))
+                    inv = 3;
+            }
+        }
+        return new int[]{root, inv, (is7?1:0)};
+
     }
 }
