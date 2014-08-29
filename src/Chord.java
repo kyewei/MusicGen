@@ -2,22 +2,52 @@
  * Created by Kye on 2014-07-08.
  */
 public class Chord {
-    protected int noteCount;
-    protected Note[] notes;
+    public int noteCount;
+    public int inversion;
+    public Pitch[] notes;
+    public char third;
+    public char fifth;
+    public char seventh;
+    public boolean isSeventh;
+    public boolean isMajor;
+    public boolean isDim;
 
-    public Chord(Pitch root, String quality, Note[] array)
+    public Chord (Pitch root, int noteCount, int inversion, char third, char fifth, char seventh)
     {
-        this.noteCount = array.length;
-        this.notes = array;
+        //Spec:
+        //root: bass pitch of chord in root position
+        //noteCount: 3 if triad, 4 if 7th, 5 if 9th, etc
+        //inversion: 0 if root, 1 if first inversion, 2 if second, etc, triads are 0-2, 7ths 0-3
+        //third: 'm' 'M'
+        //fifth: 'd' 'P' 'A'
+        //seventh: '0' 'd' 'm' 'M'
+
+        notes = new Pitch[noteCount];
+        this.noteCount=noteCount;
+        this.inversion = inversion;
+        isSeventh = (noteCount==4);
+        this.third = third;
+        this.fifth = fifth;
+        isMajor = (third=='M')&&(fifth=='P');
+        isDim = (third=='m')&&(fifth=='d');
+        this.seventh = seventh;
+        notes[0] = new Pitch(root);
+        notes[1] = Pitch.getHigherPitchWithInterval(root, 3, third);
+        notes[2] = Pitch.getHigherPitchWithInterval(root, 5, fifth);
+        if (seventh!='0')
+            notes[3] = Pitch.getHigherPitchWithInterval(root, 7, seventh);
+
+
     }
 
-    public int getNoteCount(){ return noteCount; }
-
-    /*public static Chord identify (Note[] array)
+    public void updateKey(Pitch newRoot)
     {
-
-    }*/
-
+        notes[0] = new Pitch(newRoot);
+        notes[1] = Pitch.getHigherPitchWithInterval(newRoot, 3, third);
+        notes[2] = Pitch.getHigherPitchWithInterval(newRoot, 5, fifth);
+        if (seventh!='0')
+            notes[3] = Pitch.getHigherPitchWithInterval(newRoot, 7, seventh);
+    }
 
     //Exemplars: C, Cm, Caug, Cdim, Chalfdim, C7, Cmaj7, Cm7, Cdim7, Chalfdim7, C9, C11, C13
     //Return pitches involved in root position, in order

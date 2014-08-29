@@ -3,7 +3,15 @@
  */
 public class HarmonicMinorScale extends Scale
 {
-    public static Pitch[][] allScales = new Pitch[5*7][7];
+    public HarmonicMinorScale (String key)
+    {
+        scale = allScales[indexFromKey(key)];
+    }
+
+    public HarmonicMinorScale (Pitch key)
+    {
+        scale = allScales[indexFromKey(key)];
+    }
 
     //LetterNames, like C#, Bbb, G
     public static Pitch[] generateScale(String scaleKey)
@@ -17,6 +25,7 @@ public class HarmonicMinorScale extends Scale
 
     static
     {
+        allScales = new Pitch[5*7][7];
         for (int i =0; i< allScales.length; ++i)
         {
             allScales[i] = generateScale(""+name[i/5]+modifier[i%5]);

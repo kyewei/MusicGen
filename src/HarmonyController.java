@@ -32,6 +32,7 @@ public class HarmonyController
         panel.button0.addActionListener(new Action("Action", KeyEvent.VK_A));
         panel.button1.addActionListener(new Action());
         panel.button2.addActionListener(new Action());
+        panel.button4.addActionListener(new Action());
 
         panel.makeBass.addActionListener(new Action());
         panel.makeChord.addActionListener(new Action());
@@ -88,6 +89,7 @@ public class HarmonyController
                     engine.currentChord=0;
                     for (int i=0; i< engine.soprano.length; ++i)
                     {
+                        engine.chord[i].updateKey(engine.scale.scale[engine.currentProgression[i]-1]);
                         engine.soprano[i]=null;
                         engine.alto[i]=null;
                         engine.tenor[i]=null;
@@ -229,12 +231,13 @@ public class HarmonyController
                 boolean result;
                 do {
                     Object[] arrays = engine.makeProperProgression();
-                    engine.numberOfChords = (int)(arrays[3]);
+                    engine.numberOfChords = (int)(arrays[2]);
                     engine.reset();
                     engine.currentProgression = (int[])(arrays[0]);
-                    engine.inversions = (int[])(arrays[1]);
-                    engine.isSeventh = (boolean[])(arrays[2]);
-
+                    engine.chord = (Chord[])(arrays[1]);
+                    //engine.inversions = (int[])(arrays[1]);
+                    //engine.isSeventh = (boolean[])(arrays[2]);
+                    //engine.tonicization = (int[])(arrays[3]);
                     engine.usedProper=true;
                     result = engine.buildProperBass();
                 }while(!result);
@@ -288,6 +291,41 @@ public class HarmonyController
                 panel.scorePanel.updateCurrentChord(engine.currentChord);
 
                 mainFrame.repaint();
+            }
+            else if (e.getSource() == panel.button4)
+            {
+                String input = JOptionPane.showInputDialog("Enter chord progression separated by dashes '-' using functional chord notation: ");
+
+                if (input!=null&& !input.equals("")) {
+                    String[] input2 = input.trim().split("-");
+                    int size = input2.length;
+                    Chord[] chordx = new Chord[size];
+
+                    int[] chpro = new int[size];
+
+                    engine.numberOfChords = size;
+                    engine.reset();
+
+                    for (int i = 0; i < input2.length; ++i) {
+                        int[] temp = engine.recognizeFunctionalChordSymbol(input2[i]);
+
+                        chpro[i] = temp[0];
+                        chordx[i] = new Chord(new Pitch(engine.scale.scale[temp[0] - 1]), temp[1], temp[2], (char) (temp[3]), (char) (temp[4]), (char) (temp[5]));
+
+                    }
+                    engine.usedProper = true;
+                    engine.currentProgression = chpro;
+                    engine.chord = chordx;
+
+
+                    panel.progressionInfo.setText(engine.convertProgressionToRoman());
+                    panel.numberOfChordsInfo.setText("" + engine.numberOfChords);
+
+                    panel.scorePanel.updateCurrentChord(engine.currentChord);
+                    panel.scorePanel.updateReference(engine.getSoprano(), engine.getAlto(), engine.getTenor(), engine.getBass());
+
+                    mainFrame.repaint();
+                }
             }
 
 

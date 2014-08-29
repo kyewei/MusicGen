@@ -3,9 +3,7 @@
  */
 public class MajorScale extends Scale
 {
-    public static Pitch[][] allScales = new Pitch[5*7][7];
 
-    public Pitch[] scale;
     public MajorScale (String key)
     {
         scale = allScales[indexFromKey(key)];
@@ -47,19 +45,6 @@ public class MajorScale extends Scale
     };
     //row is each diatonic chord, column element is probability of getting chord after previous said chord
 
-    public Pitch[] getDiatonicTriad(int scaleDegree)
-    {
-        scaleDegree -=1; //array start at 0
-        return new Pitch[]{scale[scaleDegree], scale[(scaleDegree+2)%7], scale[(scaleDegree+4)%7]};
-        //warning, does not instantiate new Pitches
-    }
-    public Pitch[] getDiatonic7th(int scaleDegree)
-    {
-        scaleDegree -=1; //array start at 0
-        return new Pitch[]{scale[scaleDegree], scale[(scaleDegree+2)%7], scale[(scaleDegree+4)%7], scale[(scaleDegree+6)%7]};
-        //warning, does not instantiate new Pitches
-    }
-
     public static int returnNextProgression(int currentProgressionDegree)
     {
         currentProgressionDegree-=1; //array start at 0
@@ -96,6 +81,7 @@ public class MajorScale extends Scale
         //DoubleFlat, Flat, Natural, Sharp, DoubleSharp, so 5 for each scale letter, and 7 scale letters, 35 scales altogether
         //Array allScales is 35x7
 
+        allScales = new Pitch[5*7][7];
         for (int i =0; i< allScales.length; ++i)
         {
             allScales[i] = generateScale(""+name[i/5]+modifier[i%5]);

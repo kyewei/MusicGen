@@ -5,6 +5,8 @@ public class Scale
 {
     protected static String name[] = new String[]{"C", "D", "E", "F", "G", "A", "B"}; //0-6, length=7
     protected static String modifier[] = new String[]{"bb", "b", "", "#", "##"}; //0-4, length=5
+    public static Pitch[][] allScales;
+    public Pitch[] scale;
 
     public static int indexFromKey(String scaleKey)
     {
@@ -74,4 +76,17 @@ public class Scale
         return temp;
     }
 
+    public Pitch[] getDiatonicTriad(int scaleDegree)
+    {
+        scaleDegree -=1; //array start at 0
+        return new Pitch[]{scale[scaleDegree], scale[(scaleDegree+2)%7], scale[(scaleDegree+4)%7]};
+        //warning, does not instantiate new Pitches
+    }
+
+    public Pitch[] getDiatonic7th(int scaleDegree)
+    {
+        scaleDegree -=1; //array start at 0
+        return new Pitch[]{scale[scaleDegree], scale[(scaleDegree+2)%7], scale[(scaleDegree+4)%7], scale[(scaleDegree+6)%7]};
+        //warning, does not instantiate new Pitches
+    }
 }
