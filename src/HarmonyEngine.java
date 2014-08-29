@@ -46,10 +46,7 @@ public class HarmonyEngine
         currentProgression = new int[numberOfChords];
         chord = new Chord[numberOfChords];
 
-        /*inversions = new int[numberOfChords];
         tonicization = new int[numberOfChords];
-        isSeventh = new boolean[numberOfChords];*/
-
     }
 
     public int[] currentProgression;
@@ -57,17 +54,12 @@ public class HarmonyEngine
     public Pitch key;
     public MajorScale scale;
     public Chord[] chord;
-    //public int[] inversions;
-    //public int[] tonicization;
-    //public boolean[] isSeventh;
-
+    public int[] tonicization; //0-6 to match scale.scale[tonicization[i]]
 
     public Note[] soprano;
     public Note[] alto;
     public Note[] tenor;
     public Note[] bass;
-
-
 
     public Note[] getSoprano() { return soprano; }
     public Note[] getAlto() { return alto; }
@@ -1004,9 +996,7 @@ public class HarmonyEngine
         Chord[] chordx = new Chord[position.size()];
 
         int[] chpro = new int [position.size()];
-        //int[] inv = new int [position.size()];
-        //boolean[] is7 = new boolean[position.size()];
-        //int[] toniz = new int[position.size()];
+        int[] toniz = new int[position.size()]; //default 0, which is tonic, so no need to change unless necessary
 
         int index = 0;
         for (String text : position)
@@ -1014,14 +1004,12 @@ public class HarmonyEngine
             int[] temp = recognizeFunctionalChordSymbol(text);
 
             chpro[index] = temp[0];
+            toniz[index] = temp[6];
 
-            chordx[index] = new Chord(new Pitch(scale.scale[temp[0]-1]), temp[1], temp[2], (char)(temp[3]), (char)(temp[4]), (char)(temp[5]));
-            //inv[index] = temp[1];
-            //is7[index] = temp[2]==1;
-            //toniz[index] = temp[3];
+            chordx[index] = new Chord(new Pitch(scale.scale[(temp[0]-1+temp[6])%7]), temp[1], temp[2], (char)(temp[3]), (char)(temp[4]), (char)(temp[5]));
             ++index;
         }
-        return new Object[]{chpro, chordx, chpro.length};
+        return new Object[]{chpro, chordx, toniz, chpro.length};
     }
 
     public boolean buildProperBass()
@@ -1140,11 +1128,39 @@ public class HarmonyEngine
                     case 3: temp+="42"; break;
                 }
             }
+            if (tonicization[i]!=0)
+            {
+                temp+="/";
+                switch (tonicization[i])
+                {
+                    //case 0: roman="I"; break;
+                    case 1: temp+="ii"; break;
+                    case 2: temp+="iii"; break;
+                    case 3: temp+="IV"; break;
+                    case 4: temp+="V"; break;
+                    case 5: temp+="vi"; break;
+                    case 6: temp+="vii°"; break;
+                }
+            }
             temp+="-";
         }
         return temp.substring(0,temp.length()-1);
     }
     public int[] recognizeFunctionalChordSymbol(String text)
+    {
+        if (text.contains("/"))
+        {
+            int pos = text.indexOf("/");
+            int[] temp = recFuncChoSymSlave(text.substring(0,pos));
+            int tonicization = recFuncChoSymSlave(text.substring(pos+1,text.length()))[0]-1;
+            temp[6] = tonicization;
+            return temp;
+        }
+        else
+            return recFuncChoSymSlave(text);
+    }
+
+    public int[] recFuncChoSymSlave(String text)
     {
         //returns an int[] array to hold int and boolean values
         //element 0: root
@@ -1153,6 +1169,7 @@ public class HarmonyEngine
         //element 3: third
         //element 4: fifth
         //element 5: seventh
+        //element 6: tonicization (if there) (0 indexed)
 
         int root=0;
         int inv=0;
@@ -1247,7 +1264,7 @@ public class HarmonyEngine
             fifth = 'P';
         }
 
-        return new int[]{root, (is7?4:3), inv, third, fifth, seventh};
+        return new int[]{root, (is7?4:3), inv, third, fifth, seventh, 0};
 
     }
 }

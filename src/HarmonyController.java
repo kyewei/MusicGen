@@ -231,10 +231,11 @@ public class HarmonyController
                 boolean result;
                 do {
                     Object[] arrays = engine.makeProperProgression();
-                    engine.numberOfChords = (int)(arrays[2]);
+                    engine.numberOfChords = (int)(arrays[3]);
                     engine.reset();
                     engine.currentProgression = (int[])(arrays[0]);
                     engine.chord = (Chord[])(arrays[1]);
+                    engine.tonicization = (int[])(arrays[2]);
                     //engine.inversions = (int[])(arrays[1]);
                     //engine.isSeventh = (boolean[])(arrays[2]);
                     //engine.tonicization = (int[])(arrays[3]);
@@ -300,6 +301,7 @@ public class HarmonyController
                     String[] input2 = input.trim().split("-");
                     int size = input2.length;
                     Chord[] chordx = new Chord[size];
+                    int[] toniz = new int[size];
 
                     int[] chpro = new int[size];
 
@@ -308,10 +310,9 @@ public class HarmonyController
 
                     for (int i = 0; i < input2.length; ++i) {
                         int[] temp = engine.recognizeFunctionalChordSymbol(input2[i]);
-
+                        toniz[i] = temp[6];
                         chpro[i] = temp[0];
-                        chordx[i] = new Chord(new Pitch(engine.scale.scale[temp[0] - 1]), temp[1], temp[2], (char) (temp[3]), (char) (temp[4]), (char) (temp[5]));
-
+                        chordx[i] = new Chord(new Pitch(engine.scale.scale[(temp[0] - 1+temp[6])%7]), temp[1], temp[2], (char) (temp[3]), (char) (temp[4]), (char) (temp[5]));
                     }
                     engine.usedProper = true;
                     engine.currentProgression = chpro;
