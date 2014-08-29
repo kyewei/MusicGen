@@ -74,9 +74,9 @@ public class HarmonyView extends JPanel {
         //Middle Panel that allows users to input chord progression
         middlePanel = new JPanel();
         middlePanel.add(new JLabel("Generate Chord Progression Using Matrix: "));
-        button0 = new JButton("Complex");
-        button1 = new JButton("Simple");
-        button2 = new JButton("T-P-D");
+        button0 = new JButton("Type 1");
+        button1 = new JButton("Type 2");
+        button2 = new JButton("T-P-D (Most Complex)");
         middlePanel.add(button0);
         middlePanel.add(button1);
         middlePanel.add(button2);
@@ -97,14 +97,12 @@ public class HarmonyView extends JPanel {
         makeChord = new JButton("Random Chord");
         prevButton = new JButton("Previous");
         nextButton = new JButton("Next");
-        completeAll = new JButton("Solve");
-        //fun = new JButton("FunButton");
+        completeAll = new JButton("Solve (This Does Everything)");
         navigationPanel.add(makeBass);
         navigationPanel.add(makeChord);
         navigationPanel.add(prevButton);
         navigationPanel.add(nextButton);
         navigationPanel.add(completeAll);
-        //navigationPanel.add(fun);
 
         navigationPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         c = new GridBagConstraints();
@@ -117,7 +115,6 @@ public class HarmonyView extends JPanel {
         //Panel where score is drawn
         scorePanel = new ScorePanel();
         c = new GridBagConstraints();
-        //c.fill = GridBagConstraints.BOTH;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.anchor = GridBagConstraints.PAGE_START;
         c.gridx = 0;
@@ -132,7 +129,6 @@ public class HarmonyView extends JPanel {
         c.fill = GridBagConstraints.BOTH;
         c.gridx = 0;
         c.gridy = 4;
-        //textConsole.append("HI");
 
         PrintStream out = new PrintStream(new OutputStream()
         {
@@ -162,7 +158,6 @@ public class HarmonyView extends JPanel {
     private void createMenuBar()
     {
         JMenu menu;
-        //JMenuItem menuItem;
         JCheckBoxMenuItem cbMenuItem;
 
         menuBar = new JMenuBar(); //Create the menu bar.
@@ -179,8 +174,6 @@ public class HarmonyView extends JPanel {
         //Key Menu
         menu = new JMenu("Key");
         menuBar.add(menu);
-        //keyThroughLetterName = new JMenuItem("Select Key through Letter Name");
-        //menu.add(keyThroughLetterName);
         keyThroughSign = new JMenuItem("Select Key through Number of Sharps/Flats");
         menu.add(keyThroughSign);
         //flipToRelativeKey = new JMenuItem("Flip to relative Minor/Major key");
@@ -288,9 +281,9 @@ public class HarmonyView extends JPanel {
 
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+            g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-            //Graphics2D g2 = (Graphics2D) g;
-            //g2.scale(0.75, 0.75);
+            //g.scale(0.75, 0.75);
 
             //White background
             g.setColor(Color.WHITE);
@@ -359,13 +352,11 @@ public class HarmonyView extends JPanel {
 
             }*/
 
-
-
         }
 
         public void drawNotes(Graphics g) //draws the notes and ledger lines
         {
-            int shift = 40;
+            int shift = 0;
 
             //String note = "\uD834\uDD5D";
             String note = "\uD834\uDD58";
@@ -430,7 +421,7 @@ public class HarmonyView extends JPanel {
 
         public void drawAccidentals(Graphics g)
         {
-            int shift = 40;
+            int shift = 0;
             if (soprano.length== alto.length && tenor.length== bass.length && soprano.length ==tenor.length)
             {
                 for (int i=0; i< soprano.length; ++i)

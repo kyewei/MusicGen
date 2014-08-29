@@ -270,10 +270,8 @@ public class HarmonyEngine
                     //Import list of notes
                     Pitch[] possiblePitches;
                     if (!chord[currentChord].isSeventh) {
-                        //possiblePitches = scale.getDiatonicTriad(currentProgression[currentChord]);
                         possiblePitches = chord[currentChord].notes;
                     } else {
-                        //possiblePitches = scale.getDiatonic7th(currentProgression[currentChord]);
                         possiblePitches = chord[currentChord].notes;
                     }
 
@@ -306,10 +304,8 @@ public class HarmonyEngine
                     //Import list of notes
                     Pitch[] possiblePitches;
                     if (!chord[currentChord].isSeventh) {
-                        //possiblePitches = scale.getDiatonicTriad(currentProgression[currentChord]);
                         possiblePitches = chord[currentChord].notes;
                     } else {
-                        //possiblePitches = scale.getDiatonic7th(currentProgression[currentChord]);
                         possiblePitches = chord[currentChord].notes;
                     }
 
@@ -355,10 +351,8 @@ public class HarmonyEngine
                 //Import list of notes
                 Pitch[] possiblePitches;
                 if (!chord[currentChord].isSeventh) {
-                    //possiblePitches = scale.getDiatonicTriad(currentProgression[currentChord]);
                     possiblePitches = chord[currentChord].notes;
                 } else {
-                    //possiblePitches = scale.getDiatonic7th(currentProgression[currentChord]);
                     possiblePitches = chord[currentChord].notes;
                 }
 
@@ -406,7 +400,6 @@ public class HarmonyEngine
                 case 2: referenceArray = extendedSecondInversion; break;
                 default: System.out.println("Fallthrough"); referenceArray = extendedRootPosition; break;
             }
-            //possiblePitches = scale.getDiatonicTriad(currentProgression[currentChord]);
             possiblePitches = chord[currentChord].notes;
         }
         else
@@ -419,7 +412,6 @@ public class HarmonyEngine
                 case 3: referenceArray = extended7ThirdInversion; break;
                 default: System.out.println("Fallthrough"); referenceArray = extended7RootPosition; break;
             }
-            //possiblePitches = scale.getDiatonic7th(currentProgression[currentChord]);
             possiblePitches = chord[currentChord].notes;
         }
 
@@ -793,7 +785,6 @@ public class HarmonyEngine
         for (int i=0; i<bass.length; ++i)
             bass[i]=null;
 
-        // Pitch[] possiblePitches = scale.getDiatonicTriad(currentProgression[0]);
         Pitch[] possiblePitches = chord[0].notes;
         int octave;
         //Has chances of being 3 or 2, but has safeguard so that bass cannot be below E2
@@ -1020,10 +1011,8 @@ public class HarmonyEngine
         Pitch[] possiblePitches;
 
         if (!chord[0].isSeventh)
-            //possiblePitches = scale.getDiatonicTriad(currentProgression[0]);
             possiblePitches = chord[0].notes;
         else //if (chord[0].isSeventh)
-            //possiblePitches = scale.getDiatonic7th(currentProgression[0]);
             possiblePitches = chord[0].notes;
 
         int octave = (key.chromaticNumber>7?2:3); //Higher than G
@@ -1032,10 +1021,8 @@ public class HarmonyEngine
         for (int i=1; i< bass.length; ++i)
         {
             if (!chord[i].isSeventh)
-                //possiblePitches = scale.getDiatonicTriad(currentProgression[i]);
                 possiblePitches = chord[i].notes;
             else //if (chord[i].isSeventh)
-                //possiblePitches = scale.getDiatonic7th(currentProgression[i]);
                 possiblePitches = chord[i].notes;
 
             Note[] tempNotes = new Note[3];

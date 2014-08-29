@@ -236,9 +236,6 @@ public class HarmonyController
                     engine.currentProgression = (int[])(arrays[0]);
                     engine.chord = (Chord[])(arrays[1]);
                     engine.tonicization = (int[])(arrays[2]);
-                    //engine.inversions = (int[])(arrays[1]);
-                    //engine.isSeventh = (boolean[])(arrays[2]);
-                    //engine.tonicization = (int[])(arrays[3]);
                     engine.usedProper=true;
                     result = engine.buildProperBass();
                 }while(!result);
