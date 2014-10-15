@@ -24,7 +24,9 @@ public class HarmonyView extends JPanel {
 
         mainFrame.pack();
         mainFrame.setVisible(true);
-        mainFrame.setMinimumSize(mainFrame.getSize());
+        mainFrame.setMinimumSize(getSize());
+        //System.out.println(mainFrame.getSize().getHeight()+" "+mainFrame.getSize().getWidth());
+        // 805.0 1034.0
 
         mainFrame.setVisible(true);
     }
@@ -137,8 +139,8 @@ public class HarmonyView extends JPanel {
                 textConsole.append(String.valueOf((char) input));
             }
         }); //Anonymous inner class ftw
-        System.setOut(out);
-        System.setErr(out);
+        //System.setOut(out);
+        //System.setErr(out);
 
         JPanel textPanel = new JPanel();
         textPanel.setLayout(new BorderLayout());
@@ -150,7 +152,13 @@ public class HarmonyView extends JPanel {
 
         fc = new JFileChooser();
 
-        createParentFrameAndConnectToIt();
+        //createParentFrameAndConnectToIt();
+        createMenuBar();
+
+        setMinimumSize(new Dimension(1024,754));
+        setPreferredSize(new Dimension(1024,754));
+
+
     }
     public JMenuBar menuBar;
     public JMenuItem export, exit, /*keyThroughLetterName,*/ keyThroughSign/*, flipToRelativeKey*/;
@@ -211,8 +219,9 @@ public class HarmonyView extends JPanel {
 
         public ScorePanel()
         {
-            setPreferredSize(new Dimension(1024,600));
+            setPreferredSize(new Dimension(1024, 600));
             setMinimumSize(new Dimension(1024, 600));
+
             importFont();
             musicFont = new Font("Symbola", Font.PLAIN, 96);
             musicFont2 = new Font("Symbola", Font.PLAIN, 128);
@@ -226,6 +235,7 @@ public class HarmonyView extends JPanel {
         private Font musicFont3;
         private Font musicFont4;
         private Font musicFont5;
+        private int shift = -20;
 
         //references for drawing purposes only
         private Note[] soprano;
@@ -258,15 +268,12 @@ public class HarmonyView extends JPanel {
             try {
                 GraphicsEnvironment ge =
                         GraphicsEnvironment.getLocalGraphicsEnvironment();
-                ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("src/Fonts/Symbola.ttf")));
+                ge.registerFont(Font.createFont(Font.TRUETYPE_FONT,
+                        HarmonyView.class.getResourceAsStream("Fonts/Symbola.ttf")));
                 GraphicsEnvironment graphicsEnvironment =
                         GraphicsEnvironment.getLocalGraphicsEnvironment();
             }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
-            catch(FontFormatException e)
+            catch (Exception e)
             {
                 e.printStackTrace();
             }
@@ -283,7 +290,7 @@ public class HarmonyView extends JPanel {
             g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
             g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-            //g.scale(0.75, 0.75);
+            //g.scale(40.0/48, 40.0/48);
 
             //White background
             g.setColor(Color.WHITE);
@@ -315,9 +322,10 @@ public class HarmonyView extends JPanel {
 
             g.setFont(musicFont4);
 
+
             drawNotes(g);
 
-            g.drawString("^", 152 + 48 * currentChord, 550);
+            g.drawString("^", shift + 104 + 48 * currentChord, 550);
 
             g.setFont(musicFont5);
             drawAccidentals(g);
@@ -356,7 +364,7 @@ public class HarmonyView extends JPanel {
 
         public void drawNotes(Graphics g) //draws the notes and ledger lines
         {
-            int shift = 0;
+            //int shift = 0;
 
             //String note = "\uD834\uDD5D";
             String note = "\uD834\uDD58";
@@ -368,7 +376,7 @@ public class HarmonyView extends JPanel {
 
             if (soprano.length== alto.length && tenor.length== bass.length && soprano.length ==tenor.length)
             {
-                for (int i=0; i<soprano.length; ++i) {
+                for (int i=0; i<bass.length; ++i) {
                     if (soprano[i] != null) {
                         g.drawString(note, shift+120 + i * 48, soprano[i].getLetterNum() * -8 + 432);
                         g.fillRect(shift+141+48*i, 122-8*(soprano[i].getLetterNum() - 40)-stickLen+1, 2,  stickLen);
@@ -421,10 +429,10 @@ public class HarmonyView extends JPanel {
 
         public void drawAccidentals(Graphics g)
         {
-            int shift = 0;
+            //int shift = 0;
             if (soprano.length== alto.length && tenor.length== bass.length && soprano.length ==tenor.length)
             {
-                for (int i=0; i< soprano.length; ++i)
+                for (int i=0; i< bass.length; ++i)
                 {
                     if (soprano[i]!=null) {
                         if (soprano[i].accidental == Note.Accidental.Sharp)

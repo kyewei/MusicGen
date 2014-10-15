@@ -1,14 +1,50 @@
-public class Main {
+import javax.swing.*;
 
-    public static void main(String[] args) {
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
+public class Main extends JApplet
+{
+    public static HarmonyView view;
+    public static HarmonyEngine model;
+    public static HarmonyController controller;
+    public static JFrame mainFrame;
 
-                HarmonyView view = new HarmonyView();
-                HarmonyEngine model = new HarmonyEngine();
-                HarmonyController controller = new HarmonyController(model, view);
-            }
-        });
+    public Main()
+    {
+        //Need a constructor
+    }
+    public void init()
+    {
+        try{
+            javax.swing.SwingUtilities.invokeAndWait(new Runnable() {
+                public void run() {
+                    view = new HarmonyView();
+                    model = new HarmonyEngine();
+                    controller = new HarmonyController(model, view);
+                    getContentPane().add(view);
+                    setJMenuBar(view.menuBar);
+                    setMinimumSize(view.getSize());
+                    view.setVisible(true);
+                }
+            });
+        }
+        catch(Exception e){}
+    }
+    public static void main(String[] args)
+    {
+        Main applet = new Main();
+        applet.init();
+
+        mainFrame = new JFrame();
+        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainFrame.setResizable(true);
+        mainFrame.getContentPane().add(applet);
+        mainFrame.pack();
+        mainFrame.setVisible(true);
+        mainFrame.setMinimumSize(applet.getSize());
+        mainFrame.setPreferredSize(applet.getSize());
+        //System.out.println(mainFrame.getSize().getHeight()+" "+mainFrame.getSize().getWidth());
+        // 805.0 1034.0
+        mainFrame.setVisible(true);
+
 
         //Example usages:
 
@@ -29,5 +65,6 @@ public class Main {
         //MajorScale workingscale = new MajorScale("Bb");
         //for (Pitch pitch : workingscale.scale)
         //    System.out.println (pitch); // Bb C D Eb F G A
+
     }
 }

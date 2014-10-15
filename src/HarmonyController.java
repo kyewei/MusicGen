@@ -13,13 +13,13 @@ import java.io.IOException;
 public class HarmonyController
 {
     private HarmonyEngine engine;
-    private JFrame mainFrame;
+    //private JFrame mainFrame;
     private HarmonyView panel;
 
     public HarmonyController (HarmonyEngine engine, HarmonyView panel)
     {
         this.engine = engine;
-        this.mainFrame = panel.mainFrame;
+        //this.mainFrame = panel.mainFrame;
         this.panel=panel;
         this.panel.scorePanel.updateReference(engine.getSoprano(), engine.getAlto(), engine.getTenor(), engine.getBass());
         this.panel.scorePanel.updateCurrentChord(engine.currentChord);
@@ -105,13 +105,14 @@ public class HarmonyController
                 panel.scorePanel.updateCurrentChord(engine.currentChord);
                 panel.scorePanel.updateReference(engine.getSoprano(), engine.getAlto(), engine.getTenor(), engine.getBass());
 
-                mainFrame.repaint();
+                //mainFrame.repaint();
+                panel.repaint();
             }
             else if (e.getSource() == panel.export)
             {
                 JFileChooser choose = panel.fc;
 
-                int result = choose.showSaveDialog(mainFrame);
+                int result = choose.showSaveDialog(panel);
 
                 if (result == JFileChooser.APPROVE_OPTION){
                     try {
@@ -224,7 +225,8 @@ public class HarmonyController
                 panel.scorePanel.updateCurrentChord(engine.currentChord);
                 panel.scorePanel.updateReference(engine.getSoprano(), engine.getAlto(), engine.getTenor(), engine.getBass());
 
-                mainFrame.repaint();
+                //mainFrame.repaint();
+
             }
             else if (e.getSource()==panel.button2)
             {
@@ -246,7 +248,7 @@ public class HarmonyController
                 panel.scorePanel.updateCurrentChord(engine.currentChord);
                 panel.scorePanel.updateReference(engine.getSoprano(), engine.getAlto(), engine.getTenor(), engine.getBass());
 
-                mainFrame.repaint();
+                //mainFrame.repaint();
             }
             else if (e.getSource()==panel.makeBass)
             {
@@ -260,35 +262,35 @@ public class HarmonyController
 
                 panel.scorePanel.updateCurrentChord(engine.currentChord);
 
-                mainFrame.repaint();
+                //mainFrame.repaint();
             }
             else if (e.getSource()==panel.makeChord)
             {
                 engine.nextDriver();
                 panel.scorePanel.updateCurrentChord(engine.currentChord);
 
-                mainFrame.repaint();
+                //mainFrame.repaint();
             }
             else if (e.getSource()==panel.completeAll)
             {
                 engine.doAllTheThings();
 
                 panel.scorePanel.updateCurrentChord(engine.currentChord);
-                mainFrame.repaint();
+                //mainFrame.repaint();
             }
             else if (e.getSource()  ==panel.prevButton)
             {
                 engine.goPrev();
                 panel.scorePanel.updateCurrentChord(engine.currentChord);
 
-                mainFrame.repaint();
+                //mainFrame.repaint();
             }
             else if (e.getSource() == panel.nextButton)
             {
                 engine.goNext();
                 panel.scorePanel.updateCurrentChord(engine.currentChord);
 
-                mainFrame.repaint();
+                //mainFrame.repaint();
             }
             else if (e.getSource() == panel.button4)
             {
@@ -322,9 +324,11 @@ public class HarmonyController
                     panel.scorePanel.updateCurrentChord(engine.currentChord);
                     panel.scorePanel.updateReference(engine.getSoprano(), engine.getAlto(), engine.getTenor(), engine.getBass());
 
-                    mainFrame.repaint();
+                    //mainFrame.repaint();
                 }
             }
+            //mainFrame.repaint();
+            panel.repaint();
 
 
         }

@@ -26,7 +26,8 @@ $RECYCLE.BIN/
 .LSOverride
 
 # Icon must ends with two \r.
-Icon
+Icon
+
 
 # Thumbnails
 ._*
@@ -55,4 +56,5 @@ tasks.xml
 .idea/
 out/
 MusicTools.iml
+!MusicTools.jar
 

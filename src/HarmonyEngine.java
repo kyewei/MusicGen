@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.*;
 
 /**
@@ -126,9 +127,9 @@ public class HarmonyEngine
 
     static {
 
-        String tonicCsv = "src/Matrixes/Tonic.csv";
-        String predominantCsv = "src/Matrixes/Predominant.csv";
-        String dominantCsv = "src/Matrixes/Dominant.csv";
+        String tonicCsv = "Matrixes/Tonic.csv";
+        String predominantCsv = "Matrixes/Predominant.csv";
+        String dominantCsv = "Matrixes/Dominant.csv";
 
         //Simple csv parser, knowing that there are no edge cases in provided files
         //Files are comma delimited, with CRLF \r\n line breaks, values are
@@ -139,13 +140,14 @@ public class HarmonyEngine
         for (int k = 0; k<3; ++k)
         {
             try {
-                File file;
+                //File file;
+                InputStream file;
                 if (k==0){
-                    file = new File(tonicCsv);
+                    file = HarmonyEngine.class.getResourceAsStream(tonicCsv);
                 } else if (k==1) {
-                    file = new File(predominantCsv);
+                    file = HarmonyEngine.class.getResourceAsStream(predominantCsv);
                 } else {//if (k==2)
-                    file = new File(dominantCsv);
+                    file = HarmonyEngine.class.getResourceAsStream(dominantCsv);
                 }
 
                 Scanner scanner = new Scanner(file);
@@ -219,7 +221,7 @@ public class HarmonyEngine
                     counter++;
                 }
                 scanner.close();
-            } catch (FileNotFoundException e) {
+            } catch (Exception e) {
                 //e.printStackTrace();
                 if (k==0)
                     System.err.println("TonicCSV not found");
