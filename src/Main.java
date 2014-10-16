@@ -22,7 +22,9 @@ public class Main extends JApplet
                     getContentPane().add(view);
                     setJMenuBar(view.menuBar);
                     setMinimumSize(view.getSize());
+                    //System.out.println(getHeight()+" "+getWidth());
                     view.setVisible(true);
+                    System.out.println("Output Console: ");
                 }
             });
         }
@@ -41,8 +43,10 @@ public class Main extends JApplet
         mainFrame.setVisible(true);
         mainFrame.setMinimumSize(applet.getSize());
         mainFrame.setPreferredSize(applet.getSize());
+        //System.out.println(applet.getHeight()+" "+applet.getWidth());
         //System.out.println(mainFrame.getSize().getHeight()+" "+mainFrame.getSize().getWidth());
-        // 805.0 1034.0
+        // 705.0 1034.0
+
         mainFrame.setVisible(true);
 
 

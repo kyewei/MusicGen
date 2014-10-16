@@ -233,7 +233,7 @@ public class HarmonyController
                 boolean result;
                 do {
                     Object[] arrays = engine.makeProperProgression();
-                    engine.numberOfChords = (int)(arrays[3]);
+                    engine.numberOfChords = (int)(Integer)(arrays[3]);
                     engine.reset();
                     engine.currentProgression = (int[])(arrays[0]);
                     engine.chord = (Chord[])(arrays[1]);

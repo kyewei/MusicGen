@@ -193,11 +193,11 @@ public class HarmonyEngine
                             for (int i=1; i<split.length; ++i)
                             {
                                 if (k==0) {
-                                        tonicEntry[i-1] = (split[i].equals("x")?1:0);
+                                    tonicEntry[i-1] = (split[i].equals("x")?1:0);
                                 } else if (k==1){
-                                        predominantEntry[i-1] = (split[i].equals("x")?1:0);
+                                    predominantEntry[i-1] = (split[i].equals("x")?1:0);
                                 } else {//(k==2)
-                                        dominantEntry[i-1] = (split[i].equals("x")?1:0);
+                                    dominantEntry[i-1] = (split[i].equals("x")?1:0);
                                 }
                             }
                         }
@@ -211,9 +211,9 @@ public class HarmonyEngine
                                 if (k==0) {
                                     tonicExit[i-1] = (split[i].equals("x")?1:0);
                                 } else if (k==1){
-                                        predominantExit[i-1] = (split[i].equals("x")?1:0);
+                                    predominantExit[i-1] = (split[i].equals("x")?1:0);
                                 } else {//(k==2)
-                                        dominantExit[i-1] = (split[i].equals("x")?1:0);
+                                    dominantExit[i-1] = (split[i].equals("x")?1:0);
                                 }
                             }
                         }
@@ -279,7 +279,7 @@ public class HarmonyEngine
 
                     int index = 0;
                     int[][] referenceArray = (int[][]) (result.get(index)[0]);
-                    int element = (int) (result.get(index)[1]);
+                    int element = (int) (Integer)(result.get(index)[1]);
 
                     tenor[currentChord] = new Note(possiblePitches[referenceArray[element][1]], (bass[currentChord].getLetterNum() + referenceArray[element][6] - 1) / 7);
                     alto[currentChord] = new Note(possiblePitches[referenceArray[element][2]], (bass[currentChord].getLetterNum() + referenceArray[element][7] - 1) / 7);
@@ -313,7 +313,7 @@ public class HarmonyEngine
 
                     int index = elementVisited[currentChord];
                     int[][] referenceArray = (int[][]) (result.get(index)[0]);
-                    int element = (int) (result.get(index)[1]);
+                    int element = (int) (Integer)(result.get(index)[1]);
 
                     tenor[currentChord] = new Note(possiblePitches[referenceArray[element][1]], (bass[currentChord].getLetterNum() + referenceArray[element][6] - 1) / 7);
                     alto[currentChord] = new Note(possiblePitches[referenceArray[element][2]], (bass[currentChord].getLetterNum() + referenceArray[element][7] - 1) / 7);
@@ -359,7 +359,7 @@ public class HarmonyEngine
                 }
 
                 int[][] referenceArray = (int[][]) (result.get(index)[0]);
-                int element = (int) (result.get(index)[1]);
+                int element = (int) (Integer)(result.get(index)[1]);
 
                 tenor[currentChord] = new Note(possiblePitches[referenceArray[element][1]], (bass[currentChord].getLetterNum() + referenceArray[element][6] - 1) / 7);
                 alto[currentChord] = new Note(possiblePitches[referenceArray[element][2]], (bass[currentChord].getLetterNum() + referenceArray[element][7] - 1) / 7);
@@ -901,7 +901,7 @@ public class HarmonyEngine
         //Dynamically sized since progression size is controlled random
         ArrayList<String> position = new ArrayList<String>();
         position.ensureCapacity(16);
-        
+
         position.add("I");
 
         //starting point in matrix array
