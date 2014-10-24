@@ -35,6 +35,11 @@ public class HarmonyView extends JPanel {
     public JPanel keyPanel, progressionPanel, middlePanel, navigationPanel;
     public ScorePanel scorePanel;
     public JTextArea textConsole;
+
+    public JTextArea lilypondOutput;
+    public JScrollPane lilypondOutputScroll;
+    public JFrame lilypondOutputDisplay;
+    public JButton exportButton;
     public JFileChooser fc;
 
     public HarmonyView() //Manage panel customizations
@@ -138,8 +143,8 @@ public class HarmonyView extends JPanel {
                 textConsole.append(String.valueOf((char) input));
             }
         }); //Anonymous inner class ftw
-        //System.setOut(out); // disabled for applet to work
-        //System.setErr(out); // disabled for applet to work
+        System.setOut(out); // disabled for applet to work
+        System.setErr(out); // disabled for applet to work
 
         JPanel textPanel = new JPanel();
         textPanel.setLayout(new BorderLayout());
@@ -151,6 +156,20 @@ public class HarmonyView extends JPanel {
 
         fc = new JFileChooser();
 
+        lilypondOutput = new JTextArea();
+        lilypondOutput.setEditable(false);
+        lilypondOutputScroll = new JScrollPane (lilypondOutput,
+                JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        lilypondOutputDisplay = new JFrame();
+        lilypondOutputDisplay.setLayout(new BorderLayout());
+        lilypondOutputDisplay.getContentPane().add(lilypondOutputScroll, BorderLayout.CENTER);
+        exportButton = new JButton("Export to Lilypond Source");
+        lilypondOutputDisplay.getContentPane().add(exportButton, BorderLayout.SOUTH);
+        lilypondOutputDisplay.setVisible(false);
+        lilypondOutputDisplay.setResizable(true);
+        lilypondOutputDisplay.setMinimumSize(new Dimension(480,640));
+        lilypondOutputDisplay.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+
         //createParentFrameAndConnectToIt();
         createMenuBar();
 
@@ -160,7 +179,7 @@ public class HarmonyView extends JPanel {
 
     }
     public JMenuBar menuBar;
-    public JMenuItem export, exit, /*keyThroughLetterName,*/ keyThroughSign/*, flipToRelativeKey*/;
+    public JMenuItem lyExport, exit, /*keyThroughLetterName,*/ keyThroughSign/*, flipToRelativeKey*/;
     public JCheckBoxMenuItem parallel5, parallel8, hidden5, hidden8;
     private void createMenuBar()
     {
@@ -172,8 +191,8 @@ public class HarmonyView extends JPanel {
         //File Menu
         menu = new JMenu("File");
         menuBar.add(menu);
-        export = new JMenuItem("Export");
-        menu.add(export);
+        lyExport = new JMenuItem("Export");
+        menu.add(lyExport);
         menu.addSeparator(); //Separator
         exit = new JMenuItem("Exit", KeyEvent.VK_X);
         menu.add(exit);
