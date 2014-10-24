@@ -1,9 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-  <title>MusicTools Applet</title>
-  <hr>
-  <applet code="Main.class" archive="jar/MusicTools.jar" width="1034" height="705">
-  This browser does not support Applets.
-  </applet>
-  <hr>
+    <head>
+        <title>MusicTools Applet</title>
+    </head>
+    <body>
+        <hr>
+            <applet code="Main.class" archive="jar/MusicTools.jar" width="1034" height="705">
+            This browser does not support Applets.
+            </applet>
+        <hr>
+        Note:
+        <br>
+        <br>
+        If you are running Oracle Java, you should be able to run the applet without allowing access, but you won't be able to export files unless you agree to the security prompt.
+        <br>
+        <br>
+        If you are running Iced-Tea Web, the jar has been signed so that it can be run with permissions. The applet won't run without full permissions (such as in sandbox mode), since JFileChooser needs file access permissions. You can export files also once it has full permissions.
+    </body>
 </html>
