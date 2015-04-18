@@ -9,24 +9,23 @@ public class Note extends Pitch //extension of Pitch with octave property
     {
         super(letter, accidental);
         this.octave = octave;
-        this.chromaticNumber+=octave*12;
-        this.letterNum+=octave*7;
+        this.chromaticNumber += octave * 12;
+        this.letterNum += octave * 7;
     }
 
-    public Note(Pitch pitch, int octave)
-    {
+    public Note(Pitch pitch, int octave) {
         this(pitch.letter, pitch.accidental, octave);
     }
 
     public Note(String noteName) //Constructor from string with octave at the end
     {
-        super(noteName.substring(0,noteName.length()-1));
-        this.octave = Integer.parseInt(noteName.substring(noteName.length()-1, noteName.length()));
-        this.chromaticNumber+=octave*12;
-        this.letterNum+=octave*7;
+        super(noteName.substring(0, noteName.length() - 1));
+        this.octave = Integer.parseInt(noteName.substring(noteName.length() - 1, noteName.length()));
+        this.chromaticNumber += octave * 12;
+        this.letterNum += octave * 7;
     }
 
-    public Note (Note pitch) //copy constructor
+    public Note(Note pitch) //copy constructor
     {
         this(pitch.letter, pitch.accidental, pitch.getOctave());
     }
@@ -37,9 +36,8 @@ public class Note extends Pitch //extension of Pitch with octave property
     }
 
     @Override
-    public String toString()
-    {
-        return ""+letter+accidental+octave;
+    public String toString() {
+        return "" + letter + accidental + octave;
     }
 
     @Override
@@ -63,70 +61,87 @@ public class Note extends Pitch //extension of Pitch with octave property
         return result;
     }
 
-    public String printForLilypondAbsolute ()
-    {
-        String str = ""+letter.toString().toLowerCase();
+    public String printForLilypondAbsolute() {
+        String str = "" + letter.toString().toLowerCase();
         if (accidental == Accidental.Sharp)
-            str +="is";
+            str += "is";
         else if (accidental == Accidental.Flat)
-            str +="es";
-        if (octave-3 !=0)
-            str += new String(new char[Math.abs(octave-3)]).replace("\0", (octave-3>0?"'":","));
+            str += "es";
+        if (octave - 3 != 0)
+            str += new String(new char[Math.abs(octave - 3)]).replace("\0", (octave - 3 > 0 ? "'" : ","));
         return str;
     }
 
-    public static Note getOctaveLower (Note a){ return new Note(a.letter, a.accidental, a.octave-1); }
-    public static Note getOctaveHigher(Note a){ return new Note(a.letter, a.accidental, a.octave+1); }
+    public static Note getOctaveLower(Note a) {
+        return new Note(a.letter, a.accidental, a.octave - 1);
+    }
+
+    public static Note getOctaveHigher(Note a) {
+        return new Note(a.letter, a.accidental, a.octave + 1);
+    }
 
     public static int[][] qualityAndDegreeToSemitone = new int[][]{
-            { -1,  0,  2,  4,  6,  7,  9, 11 },
-            { -1,  1,  3, -1, -1,  8, 10, -1 },
-            { -1,  2,  4, -1, -1,  9, 11, -1 },
-            {  0, -1, -1,  5,  7, -1, -1, 12 },
-            {  1,  3,  5,  6,  8, 10, 12, 13 }
+            {-1, 0, 2, 4, 6, 7, 9, 11},
+            {-1, 1, 3, -1, -1, 8, 10, -1},
+            {-1, 2, 4, -1, -1, 9, 11, -1},
+            {0, -1, -1, 5, 7, -1, -1, 12},
+            {1, 3, 5, 6, 8, 10, 12, 13}
     }; //row is by quality, column is semitone
 
 
     //Calculates intervals above a given note while preserving accidentals and not resorting to enharmonically equivalent note
     public static Note getIntervalHigher(Note a, int interval, char quality) // D/d - diminished, m - minor, M - major, P/p - perfect, A/a - augmented
     {
-        boolean reverse = (interval<0);
-        if(reverse)
-            interval*=-1;
+        boolean reverse = (interval < 0);
+        if (reverse)
+            interval *= -1;
 
         int arrayIndex;
-        switch(quality)
-        {
-            case 'D': arrayIndex=0; break;
-            case 'd': arrayIndex=0; break; // Just in case
-            case 'm': arrayIndex=1; break;
-            case 'M': arrayIndex=2; break;
-            case 'P': arrayIndex=3; break;
-            case 'p': arrayIndex=3; break; // Just in case
-            case 'A': arrayIndex=4; break;
-            case 'a': arrayIndex=4; break; // Just in case
-            default : arrayIndex=-1;
+        switch (quality) {
+            case 'D':
+                arrayIndex = 0;
+                break;
+            case 'd':
+                arrayIndex = 0;
+                break; // Just in case
+            case 'm':
+                arrayIndex = 1;
+                break;
+            case 'M':
+                arrayIndex = 2;
+                break;
+            case 'P':
+                arrayIndex = 3;
+                break;
+            case 'p':
+                arrayIndex = 3;
+                break; // Just in case
+            case 'A':
+                arrayIndex = 4;
+                break;
+            case 'a':
+                arrayIndex = 4;
+                break; // Just in case
+            default:
+                arrayIndex = -1;
         }
 
-        int deltaSemitone = qualityAndDegreeToSemitone[arrayIndex][((interval-1)%7+7)%7];
+        int deltaSemitone = qualityAndDegreeToSemitone[arrayIndex][((interval - 1) % 7 + 7) % 7];
 
         int currentLetterNumber = a.getLetterNum();
         if (!reverse)
-            currentLetterNumber+=interval-1;
+            currentLetterNumber += interval - 1;
         else
-            currentLetterNumber-=interval-1;
-        Letter tempLetter = Letter.getLetterFromLetterNum(currentLetterNumber%7);
-        int tempOctave = currentLetterNumber/7;
+            currentLetterNumber -= interval - 1;
+        Letter tempLetter = Letter.getLetterFromLetterNum(currentLetterNumber % 7);
+        int tempOctave = currentLetterNumber / 7;
         Accidental tempAccidental = a.accidental;
 
-        int needToMoveSemitone = (tempOctave*12+tempLetter.getChromaticNumber()+tempAccidental.getChromaticNumber())-a.getChromaticNumber();
-        if (!reverse && needToMoveSemitone!=deltaSemitone)
-        {
-            tempAccidental = tempAccidental.getNext(deltaSemitone-needToMoveSemitone);
-        }
-        else if (reverse && needToMoveSemitone!=deltaSemitone)
-        {
-            tempAccidental = tempAccidental.getNext(deltaSemitone*-1 - needToMoveSemitone);
+        int needToMoveSemitone = (tempOctave * 12 + tempLetter.getChromaticNumber() + tempAccidental.getChromaticNumber()) - a.getChromaticNumber();
+        if (!reverse && needToMoveSemitone != deltaSemitone) {
+            tempAccidental = tempAccidental.getNext(deltaSemitone - needToMoveSemitone);
+        } else if (reverse && needToMoveSemitone != deltaSemitone) {
+            tempAccidental = tempAccidental.getNext(deltaSemitone * -1 - needToMoveSemitone);
         }
         return new Note(tempLetter, tempAccidental, tempOctave);
 
@@ -175,20 +190,17 @@ public class Note extends Pitch //extension of Pitch with octave property
 
     // M2, m2, P4, A4, d5
     //Above method with string input instead
-    public static Note getIntervalHigher(Note a, String entry)
-    {
+    public static Note getIntervalHigher(Note a, String entry) {
         return getIntervalHigher(a, Integer.parseInt(entry.substring(1)), entry.charAt(0));
     }
 
     //Gets intervals below a given note, using a negative argument for interval
-    public static Note getIntervalLower(Note a, int interval, char quality)
-    {
+    public static Note getIntervalLower(Note a, int interval, char quality) {
         return getIntervalHigher(a, -interval, quality);
     }
 
     // M-2, m-2, P-4, A-4, d-5
-    public static Note getIntervalLower(Note a, String entry)
-    {
+    public static Note getIntervalLower(Note a, String entry) {
         return getIntervalLower(a, Integer.parseInt(entry.substring(1)), entry.charAt(0));
     }
 }

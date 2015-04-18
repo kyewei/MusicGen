@@ -1,19 +1,17 @@
 import javax.swing.*;
 
-public class Main extends JApplet
-{
+public class Main extends JApplet {
     public static HarmonyView view;
     public static HarmonyEngine model;
     public static HarmonyController controller;
     public static JFrame mainFrame;
 
-    public Main()
-    {
+    public Main() {
         //Need a constructor
     }
-    public void init()
-    {
-        try{
+
+    public void init() {
+        try {
             javax.swing.SwingUtilities.invokeAndWait(new Runnable() {
                 public void run() {
                     view = new HarmonyView();
@@ -27,11 +25,11 @@ public class Main extends JApplet
                     System.out.println("Output Console: ");
                 }
             });
+        } catch (Exception e) {
         }
-        catch(Exception e){}
     }
-    public static void main(String[] args)
-    {
+
+    public static void main(String[] args) {
         Main applet = new Main();
         applet.init();
 
