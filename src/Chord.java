@@ -40,9 +40,9 @@ public class Chord {
         this.isFlat = (special == 'b');
     }
 
-    public Chord(Pitch root, int noteCount, int inversion, char third, char fifth, char seventh) {
+    /*public Chord(Pitch root, int noteCount, int inversion, char third, char fifth, char seventh) {
         this(root, noteCount, inversion, third, fifth, seventh, ' ');
-    }
+    }*/
 
     public void updateKey(Pitch newRoot) {
         notes[0] = new Pitch(newRoot);

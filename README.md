@@ -5,7 +5,9 @@ This is a little tool I made that can generate random progressions of 4-part har
 
 
 ##Motivation
-The primary reason I built this was mostly because I wanted a way of organizing the harmony knowledge I learned in preparation for the RCM Harmony exam I did this summer. Proper MVC design was fun too. It ended up being a bigger project than I thought. The core part was mapping out the matrices that summarized patterns in the tonic, predominant and dominant harmony sections of a piece of music, which ended up being a central part of my implementation. 
+The primary reason I built this was mostly because I wanted a way of organizing the harmony knowledge I learned in preparation for the RCM Harmony exam I did this summer. 
+Proper MVC design was fun too. It ended up being a bigger project than I thought. 
+The core part was mapping out the matrices that summarized patterns in the tonic, predominant and dominant harmony sections of a piece of music, which ended up being a central part of my implementation. 
 
 
 ##Implementation and Rationale
@@ -36,10 +38,11 @@ In the end, I would say that the second way was a lot more successful, in that t
 
 * Can specify key (only major for now) piece is generated in
 * Choice between stochastic matrix and tonic-predominant-dominant matrix
-* Auto-completes entire 4 voicings
+* Entry of custom progressions with auto-completion for 4 voicings (try something complicated like `I-V/vi-vi-bVI-IV-ii6-V42-I`)
 * Able to select which rules of harmony to follow
 * Can also identify intervals, make scales in natural and single sharp/flat keys (this needed to exist for the rest to work)
 * Export to Lilypond .ly file, which creates pdf score and midi
+* Play progression directly through midi sound synthesis
 * Tonicization (still need to fill up the matrix though)
 
 
@@ -59,10 +62,7 @@ In the end, I would say that the second way was a lot more successful, in that t
 
 ##Features in the (Near?) Future
 * Minor key
-* Non diatonic chords (sort of have it now)
-* Modulation
-* Passing notes, echappes, neighbour notes, the works
-
+* Modulation (have secondary dominants/sub-dominants, etc, now)
 
 I would be happy if anyone wants to contribute to the the T-P-D matrices.
 

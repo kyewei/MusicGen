@@ -19,11 +19,11 @@ public class HarmonyEngine {
         for (int i = 0; i < currentProgression.length; ++i)//assume blank;
         {
             if (currentProgression[i] == 1 || currentProgression[i] == 4 || currentProgression[i] == 5)
-                chord[i] = new Chord(new Pitch(scale.scale[currentProgression[i] - 1]), 3, 0, 'M', 'P', '0');
+                chord[i] = new Chord(new Pitch(scale.scale[currentProgression[i] - 1]), 3, 0, 'M', 'P', '0', ' ');
             else if (currentProgression[i] == 7)
-                chord[i] = new Chord(new Pitch(scale.scale[currentProgression[i] - 1]), 3, 0, 'm', 'd', '0');
+                chord[i] = new Chord(new Pitch(scale.scale[currentProgression[i] - 1]), 3, 0, 'm', 'd', '0', ' ');
             else
-                chord[i] = new Chord(new Pitch(scale.scale[currentProgression[i] - 1]), 3, 0, 'm', 'P', '0');
+                chord[i] = new Chord(new Pitch(scale.scale[currentProgression[i] - 1]), 3, 0, 'm', 'P', '0', ' ');
         }
         buildBass();
 
@@ -849,11 +849,11 @@ public class HarmonyEngine {
         for (int i = 0; i < temp.length; ++i)//assume blank;
         {
             if (temp[i] == 1 || temp[i] == 4 || temp[i] == 5)
-                chord[i] = new Chord(new Pitch(scale.scale[temp[i] - 1]), 3, 0, 'M', 'P', '0');
+                chord[i] = new Chord(new Pitch(scale.scale[temp[i] - 1]), 3, 0, 'M', 'P', '0', ' ');
             else if (temp[i] == 7)
-                chord[i] = new Chord(new Pitch(scale.scale[temp[i] - 1]), 3, 0, 'm', 'd', '0');
+                chord[i] = new Chord(new Pitch(scale.scale[temp[i] - 1]), 3, 0, 'm', 'd', '0', ' ');
             else
-                chord[i] = new Chord(new Pitch(scale.scale[temp[i] - 1]), 3, 0, 'm', 'P', '0');
+                chord[i] = new Chord(new Pitch(scale.scale[temp[i] - 1]), 3, 0, 'm', 'P', '0', ' ');
         }
         return temp;
     }
@@ -957,7 +957,16 @@ public class HarmonyEngine {
             chpro[index] = temp[0];
             toniz[index] = temp[6];
 
-            chordx[index] = new Chord(new Pitch(scale.scale[(temp[0] - 1 + temp[6]) % 7]), temp[1], temp[2], (char) (temp[3]), (char) (temp[4]), (char) (temp[5]));
+            Pitch temp2 = new Pitch(scale.scale[(temp[0] - 1) % 7]);
+            char tonicizequality = (temp[6] == 0 || temp[6] == 3 || temp[6] == 4 ? 'P' : 'M'); //P1, P4, P5
+            temp2 = Pitch.getHigherPitchWithInterval(temp2, temp[6]+1, tonicizequality);
+            char modify = temp[7] == -1 ? 'b' : ' ';
+            if (temp[7] == -1) { // lowered pitches
+                temp2 =Pitch.getHigherPitchWithInterval(temp2, 3, 'm');
+                temp2 =Pitch.getHigherPitchWithInterval(temp2, -3, 'M');
+            }
+
+            chordx[index] = new Chord(temp2, temp[1], temp[2], (char) (temp[3]), (char) (temp[4]), (char) (temp[5]), modify);
             ++index;
         }
         return new Object[]{chpro, chordx, toniz, chpro.length};

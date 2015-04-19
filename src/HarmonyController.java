@@ -356,7 +356,9 @@ public class HarmonyController {
                         toniz[i] = temp[6];
                         chpro[i] = temp[0];
 
-                        Pitch temp2 = new Pitch(engine.scale.scale[(temp[0] - 1 + temp[6]) % 7]);
+                        Pitch temp2 = new Pitch(engine.scale.scale[(temp[0] - 1) % 7]);
+                        char tonicizequality = (temp[6] == 0 || temp[6] == 3 || temp[6] == 4 ? 'P' : 'M'); //P1, P4, P5
+                        temp2 = Pitch.getHigherPitchWithInterval(temp2, temp[6]+1, tonicizequality);
                         char modify = temp[7] == -1 ? 'b' : ' ';
                         if (temp[7] == -1) { // lowered pitches
                             temp2 =Pitch.getHigherPitchWithInterval(temp2, 3, 'm');
@@ -367,7 +369,7 @@ public class HarmonyController {
                     engine.usedProper = true;
                     engine.currentProgression = chpro;
                     engine.chord = chordx;
-
+                    engine.tonicization = toniz;
 
                     // gotta build bassline
                     engine.buildProperBass();
