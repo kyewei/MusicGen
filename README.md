@@ -9,6 +9,9 @@ The primary reason I built this was mostly because I wanted a way of organizing 
 Proper MVC design was fun too. It ended up being a bigger project than I thought. 
 The core part was mapping out the matrices that summarized patterns in the tonic, predominant and dominant harmony sections of a piece of music, which ended up being a central part of my implementation. 
 
+####Update: 4/21/2015
+I've recently be made aware of HookTheory's API for its crowd-sourced song chord collection. They contain probabilities of a chord following some previous chord, and of progressions also. I've written some scripts in Node.js to scrape and analyze. They are in the `hooktheory-api-data-js` folder.
+
 
 ##Implementation and Rationale
 

@@ -58,3 +58,10 @@ out/
 MusicTools.iml
 !MusicTools.jar
 
+
+
+
+
+# Node.js things
+
+node_modules

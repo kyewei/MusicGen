@@ -4,17 +4,23 @@
         <title>MusicTools Applet</title>
     </head>
     <body>
-        <hr>
+        <div>
             <applet code="Main.class" archive="jar/MusicTools.jar" width="1034" height="705">
             This browser does not support Applets.
             </applet>
-        <hr>
+        </div>
         Note:
         <br>
         <br>
-        If you are running Oracle Java, you should be able to run the applet without allowing access, but you won't be able to export files unless you agree to the security prompt.
+        This applet has the ability to write to file.
         <br>
         <br>
-        If you are running Iced-Tea Web, the jar has been signed so that it can be run with permissions. The applet won't run without full permissions (such as in sandbox mode), since JFileChooser needs file access permissions. You can export files also once it has full permissions.
+        On newer versions of Chrome, NPAPI support is disabled, which means running Java applets is disabled unless a flag in <a href="chrome://flags/">chrome://flags/</a> called "Enable NPAPI" is ticked. Unfortunately, this flag may not be available in future versions of Chrome :(
+        <br>
+        <br>
+        If you are running Oracle Java, you might be able to run the applet without allowing full system access, but you won't be able to export files unless you agree to the security prompt. On newer versions of Oracle Java (8), you may need to add the <a href="jar/MusicTools.crt">certificate</a> to "Trusted Certificates" and "Signed CA" in settings.
+        <br>
+        <br>
+        If you are running Iced-Tea Web, this applet/jar is self-signed so that on some versions it can be run once you accept the security prompt. 
     </body>
 </html>
