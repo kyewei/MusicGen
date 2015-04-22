@@ -11,6 +11,17 @@ function load (name) {
 }
 exports.load = load;
 
+function save (data, name) {
+    fs.writeFile(name, JSON.stringify(data), function(err) {
+        if (err) {
+            console.log("Error writing to file.", err);
+            return;
+        }
+        console.log("Successful.");
+    });
+}
+exports.save = save;
+
 function getProb(data) {
     var keys = Object.keys(data);
     var result = [];
@@ -21,9 +32,12 @@ function getProb(data) {
 }
 exports.getProb = getProb;
 
-function getNext(str) {
+function getNext(data, str) {
     // str is "1-6-4" etc
     var progression = str.split("-");
+    if (progression.length === 1 && progression[0]=== "") {
+        return getProb(data).sort().reverse();
+    }
     var obj = data;
     for (var i=0; i< progression.length; ++i) {
         var chord = progression[i];
@@ -39,6 +53,34 @@ function getNext(str) {
 }
 exports.getNext = getNext;
 
+function fixDataProbability(data) {
+    var obj = data;
+    var keys = Object.keys(data);
+    
+    for (var i=0; i< keys.length; ++i) {
+        if (!data[keys[i]].roman && Object.keys(data[keys[i]].possibilities).length === 0) {
+            delete data[keys[i]];
+            continue;
+        } else {
+            fixDataProbability(data[keys[i]].possibilities);
+        }
+    }
+    var sum = 0;
+    var empty = [];
+    keys = Object.keys(data);
+    for (var i=0; i< keys.length; ++i) {
+        if (!data[keys[i]].roman) {
+            empty.push(keys[i]);
+        } else {
+            sum += data[keys[i]].probability;
+        }
+    }
+    for (var i=0; i< empty.length; ++i) {
+        data[empty[i]].probability = (1-sum) / empty.length;
+    }
+}
+exports.fixDataProbability=fixDataProbability;
+
 function makeRandom(data) {
     var prog = [];
     var obj = data;
@@ -51,8 +93,11 @@ function makeRandom(data) {
         
         //normalize
         var sum = 0;
+        var empty;
         for (var i=0; i< prob.length; ++i) {
-            sum+=prob[i][0];
+            if (prob[i][0]) {
+                sum+=prob[i][0];
+            } 
         }
         for (var i=0; i< prob.length; ++i) {
             prob[i][0] *= 1.0/sum;
