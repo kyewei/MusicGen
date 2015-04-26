@@ -57,6 +57,7 @@ tasks.xml
 out/
 MusicTools.iml
 !MusicTools.jar
+!ext-libraries/*
 
 
 

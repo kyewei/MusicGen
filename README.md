@@ -76,10 +76,17 @@ In the end, I would say that the second way was a lot more successful, in that t
 I would be happy if anyone wants to contribute to the the T-P-D matrices.
 
 
+##Licensing
+
 This project uses the Musica (ver 3.12) font found [here][3]. 
 The font provides Unicode support in the 1D100-1D1DD range, which represents the Musical Symbols. The font is offered as "free for any use".
+
 License for HookTheory data is unknown. Please contact HookTheory.com directly.
+
+The [Java JSON library][4] license is provided [here][5] (free use).
 
 [1]: http://www.hooktheory.com/blog/i-analyzed-the-chords-of-1300-popular-songs-for-patterns-this-is-what-i-found/
 [2]: http://www.hooktheory.com/trends
 [3]: http://users.teilar.gr/~g1951d/
+[4]: http://www.json.org/java/
+[5]: http://www.json.org/license.html
