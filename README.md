@@ -3,6 +3,7 @@ MusicTools
 
 This is a little tool I made that can generate random progressions of 4-part harmony for SATB. It produces notes for 4 voices that are approximately 8-10 notes long. The output is visualized on a graphic staff accompanied by their respective functional chord symbols. 
 
+Try out the applet [here](http://kyewei.github.io/MusicTools/)! Java is required.
 
 ##Motivation
 The primary reason I built this was mostly because I wanted a way of organizing the harmony knowledge I learned in preparation for the RCM Harmony exam I did this summer. 
@@ -10,12 +11,17 @@ Proper MVC design was fun too. It ended up being a bigger project than I thought
 The core part was mapping out the matrices that summarized patterns in the tonic, predominant and dominant harmony sections of a piece of music, which ended up being a central part of my implementation. 
 
 ####Update: 4/21/2015
-I've recently be made aware of HookTheory's API for its crowd-sourced song chord collection. They contain probabilities of a chord following some previous chord, and of progressions also. I've written some scripts in Node.js to scrape and analyze. They are in the `hooktheory-api-data-js` folder.
+I've recently be made aware of HookTheory's API for its crowd-sourced song chord collection. 
+They contain probabilities of a chord following some previous chord, and of progressions also. 
+I've written some scripts in Node.js to scrape and analyze. 
+They are in the `hooktheory-api-data-js` folder. 
+I've also added the data I've collected from its API as a source in the application for generating progressions.
 
 
 ##Implementation and Rationale
 
-My idea was to first generate an appropriate functional chord progression. The progression would end in a cadence of some sort. It would then automatically produce a SATB voicing following said progression that would adhere to traditional rules of 4 part writing. 
+My idea was to first generate an appropriate functional chord progression. The progression would end in a cadence of some sort. 
+It would then automatically produce a SATB voicing following said progression that would adhere to traditional rules of 4 part writing. 
 
 I had brainstormed many ways to potentially do this. I ended up doing it in two ways:
 
@@ -70,7 +76,9 @@ In the end, I would say that the second way was a lot more successful, in that t
 I would be happy if anyone wants to contribute to the the T-P-D matrices.
 
 
-This project uses the Musica (ver 3.12) font found [here][3]. The font provides Unicode support in the 1D100-1D1DD range, which represents the Musical Symbols. The font is offered as "free for any use".
+This project uses the Musica (ver 3.12) font found [here][3]. 
+The font provides Unicode support in the 1D100-1D1DD range, which represents the Musical Symbols. The font is offered as "free for any use".
+License for HookTheory data is unknown. Please contact HookTheory.com directly.
 
 [1]: http://www.hooktheory.com/blog/i-analyzed-the-chords-of-1300-popular-songs-for-patterns-this-is-what-i-found/
 [2]: http://www.hooktheory.com/trends

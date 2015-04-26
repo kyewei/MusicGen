@@ -1,4 +1,4 @@
 Manifest-Version: 1.0
-Main-Class: Main
+Main-Class: com.kyewei.MusicTools.Main
 Permissions: all-permissions
 

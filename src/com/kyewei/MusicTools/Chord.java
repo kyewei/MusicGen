@@ -1,6 +1,8 @@
 /**
  * Created by Kye on 2014-07-08.
  */
+package com.kyewei.MusicTools;
+
 public class Chord {
     public int noteCount;
     public int inversion;
@@ -12,6 +14,7 @@ public class Chord {
     public boolean isMajor;
     public boolean isDim;
     public boolean isFlat;
+    public boolean isSharp;
 
     public Chord(Pitch root, int noteCount, int inversion, char third, char fifth, char seventh, char special) {
         //Spec:
@@ -38,6 +41,7 @@ public class Chord {
             notes[3] = Pitch.getHigherPitchWithInterval(root, 7, seventh);
 
         this.isFlat = (special == 'b');
+        this.isSharp = (special == '#');
     }
 
     /*public Chord(Pitch root, int noteCount, int inversion, char third, char fifth, char seventh) {

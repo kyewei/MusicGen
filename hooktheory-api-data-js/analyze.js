@@ -32,6 +32,19 @@ function getProb(data) {
 }
 exports.getProb = getProb;
 
+function exportToMusicToolsFormat(data) {
+    var temp = {};
+    var keys = Object.keys(data);
+    
+    for (var i=0; i<keys.length; ++i) {
+        temp[keys[i]] = {};
+        temp[keys[i]]["%"] = Math.floor(data[keys[i]].probability*100000)/100000;
+        temp[keys[i]]["-"] = exportToMusicToolsFormat(data[keys[i]].possibilities);
+    }
+    return temp;
+}
+exports.exportToMusicToolsFormat = exportToMusicToolsFormat;
+
 function getNext(data, str) {
     // str is "1-6-4" etc
     var progression = str.split("-");
@@ -75,9 +88,17 @@ function fixDataProbability(data) {
             sum += data[keys[i]].probability;
         }
     }
-    for (var i=0; i< empty.length; ++i) {
-        data[empty[i]].probability = (1-sum) / empty.length;
-    }
+    /*if (empty.length === 0) {
+        for (var i=0; i< keys.length; ++i) {
+            if (data[keys[i]].roman) {
+                data[keys[i]].probability *= 1.0/sum;;
+            }
+        }
+    } else {*/
+        for (var i=0; i< empty.length; ++i) {
+            data[empty[i]].probability = (1-sum) / empty.length;
+        }
+    //}
 }
 exports.fixDataProbability=fixDataProbability;
 

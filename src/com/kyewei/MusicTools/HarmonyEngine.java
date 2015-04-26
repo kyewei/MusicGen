@@ -1,7 +1,10 @@
-import java.io.File;
-import java.io.FileNotFoundException;
+package com.kyewei.MusicTools;
+
 import java.io.InputStream;
 import java.util.*;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by Kye on 2014-07-07.
@@ -131,12 +134,18 @@ public class HarmonyEngine {
 
     public static HashMap<String, Integer> stringToIndex = new HashMap<String, Integer>();
     public static HashMap<Integer, String> indexToString = new HashMap<Integer, String>();
+    public static JSONObject HTData1;
+    public static JSONObject HTData2;
+    public static JSONObject HTConvertID;
 
     static {
 
-        String tonicCsv = "Matrixes/Tonic.csv";
-        String predominantCsv = "Matrixes/Predominant.csv";
-        String dominantCsv = "Matrixes/Dominant.csv";
+        String tonicCsv = "Matrices/Tonic.csv";
+        String predominantCsv = "Matrices/Predominant.csv";
+        String dominantCsv = "Matrices/Dominant.csv";
+        String hookTheoryJSON1 = "JSONs/dataTry1.json";
+        String hookTheoryJSON2 = "JSONs/dataTry2.json";
+        String hookTheoryConvertJSON = "JSONs/convertID.json";
 
         //Simple csv parser, knowing that there are no edge cases in provided files
         //Files are comma delimited, with CRLF \r\n line breaks, values are
@@ -229,6 +238,36 @@ public class HarmonyEngine {
                 else //if (k==2)
                     System.err.println("DominantCSV not found");
             }
+        }
+
+        try {
+            InputStream file = HarmonyEngine.class.getResourceAsStream(hookTheoryJSON1);
+            Scanner s = new Scanner(file).useDelimiter("\\A");
+            String jsonTxt = s.hasNext() ? s.next() : "";
+            HTData1 = new JSONObject(jsonTxt);
+        } catch (Exception e) {
+            //e.printStackTrace();
+            System.err.println("hookTheoryJSON1 not found or JSON parse error");
+        }
+
+        try {
+            InputStream file = HarmonyEngine.class.getResourceAsStream(hookTheoryJSON2);
+            Scanner s = new Scanner(file).useDelimiter("\\A");
+            String jsonTxt = s.hasNext() ? s.next() : "";
+            HTData2 = new JSONObject(jsonTxt);
+        } catch (Exception e) {
+            //e.printStackTrace();
+            System.err.println("hookTheoryJSON2 not found or JSON parse error");
+        }
+
+        try {
+            InputStream file = HarmonyEngine.class.getResourceAsStream(hookTheoryConvertJSON);
+            Scanner s = new Scanner(file).useDelimiter("\\A");
+            String jsonTxt = s.hasNext() ? s.next() : "";
+            HTConvertID = new JSONObject(jsonTxt);
+        } catch (Exception e) {
+            //e.printStackTrace();
+            System.err.println("hookTheoryConvertJSON not found or JSON parse error");
         }
 
         loop('0');
@@ -867,7 +906,7 @@ public class HarmonyEngine {
         position.add("I");
 
         //starting point in matrix array
-        int currentPosition = 0;
+        int currentChordIndex = 0;
 
         //tonic harmony, 1-5 times
         int minForSection = (int) (Math.random() * 5 + 1);
@@ -875,23 +914,37 @@ public class HarmonyEngine {
         for (int i = 0; i < minForSection; ++i) {
             ArrayList<Integer> choices = new ArrayList<Integer>();
             for (int j = 0; j < tonicMatrix.length; ++j)
-                if (tonicMatrix[currentPosition][j] == 1)
+                if (tonicMatrix[currentChordIndex][j] == 1)
                     choices.add(j);
             if (choices.size() == 0) { //Error output
-                System.out.println("Current chord: " + indexToString.get(currentPosition) + ", " + i + " out of " + minForSection);
+                if (tonicExit[currentChordIndex] == 1) {
+                    break;
+                }
+                System.out.println("Current chord: " + indexToString.get(currentChordIndex) + ", " + i + " out of " + minForSection + "for tonic");
                 for (String er : position)
                     System.out.print(er + "-");
             }
-            int random = (int) (Math.random() * choices.size());
-
-            currentPosition = choices.get(random);
-            position.add(indexToString.get(choices.get(random)));
-
-            if (i == minForSection - 1) { //check if last one is valid exit chord
-                i--;
-                if (tonicExit[stringToIndex.get(position.get(position.size() - 1))] == 1)
-                    i++;
+            int random;
+            if (i < minForSection - 1) {
+                random = (int) (Math.random() * choices.size());
+                currentChordIndex = choices.get(random);
+            } else {
+                ArrayList<Integer> exitChoices = new ArrayList<Integer>();
+                for (int j = 0; j < tonicMatrix.length; ++j)
+                    //check if last one is valid exit chord
+                    //done here so progressions are shorter and don't go on forever
+                    if (tonicMatrix[currentChordIndex][j] == 1 && tonicExit[j] == 1)
+                        exitChoices.add(j);
+                if (exitChoices.size() == 0) { // no exit possibility, so have to go on
+                    i--;
+                    random = (int) (Math.random() * choices.size());
+                    currentChordIndex = choices.get(random);
+                } else {
+                    random = (int) (Math.random() * exitChoices.size());
+                    currentChordIndex = exitChoices.get(random);
+                }
             }
+            position.add(indexToString.get(currentChordIndex));
         }
 
         //predominant harmony, 1-3 times
@@ -900,48 +953,76 @@ public class HarmonyEngine {
         for (int i = 0; i < minForSection; ++i) {
             ArrayList<Integer> choices = new ArrayList<Integer>();
             for (int j = 0; j < predominantMatrix.length; ++j)
-                if (predominantMatrix[currentPosition][j] == 1)
+                if (predominantMatrix[currentChordIndex][j] == 1)
                     choices.add(j);
             if (choices.size() == 0) { //Error output
-                System.out.println("Current chord: " + indexToString.get(currentPosition) + ", " + i + " out of " + minForSection);
+                if (predominantExit[currentChordIndex] == 1) {
+                    break;
+                }
+                System.out.println("Current chord: " + indexToString.get(currentChordIndex) + ", " + i + " out of " + minForSection + "for predominant");
                 for (String er : position)
                     System.out.print(er + "-");
             }
-            int random = (int) (Math.random() * choices.size());
-
-            currentPosition = choices.get(random);
-            position.add(indexToString.get(choices.get(random)));
-
-            if (i == minForSection - 1) { //check if last one is valid exit chord
-                i--;
-                if (predominantExit[stringToIndex.get(position.get(position.size() - 1))] == 1)
-                    i++;
+            int random;
+            if (i < minForSection - 1) {
+                random = (int) (Math.random() * choices.size());
+                currentChordIndex = choices.get(random);
+            } else {
+                ArrayList<Integer> exitChoices = new ArrayList<Integer>();
+                for (int j = 0; j < predominantMatrix.length; ++j)
+                    //check if last one is valid exit chord
+                    //done here so progressions are shorter and don't go on forever
+                    if (predominantMatrix[currentChordIndex][j] == 1 && predominantExit[j] == 1)
+                        exitChoices.add(j);
+                if (exitChoices.size() == 0) { // no exit possibility, so have to go on
+                    i--;
+                    random = (int) (Math.random() * choices.size());
+                    currentChordIndex = choices.get(random);
+                } else {
+                    random = (int) (Math.random() * exitChoices.size());
+                    currentChordIndex = exitChoices.get(random);
+                }
             }
+            position.add(indexToString.get(currentChordIndex));
         }
 
-        //dominant harmony, 1-2 times
-        minForSection = (int) (Math.random() * 2 + 1);
+        //dominant harmony, 1-3 times
+        minForSection = (int) (Math.random() * 3 + 1);
 
         for (int i = 0; i < minForSection; ++i) {
             ArrayList<Integer> choices = new ArrayList<Integer>();
             for (int j = 0; j < dominantMatrix.length; ++j)
-                if (dominantMatrix[currentPosition][j] == 1)
+                if (dominantMatrix[currentChordIndex][j] == 1)
                     choices.add(j);
             if (choices.size() == 0) { //Error output
-                System.out.println("Current chord: " + indexToString.get(currentPosition) + ", " + i + " out of " + minForSection);
+                if (dominantExit[currentChordIndex] == 1) {
+                    break;
+                }
+                System.out.println("Current chord: " + indexToString.get(currentChordIndex) + ", " + i + " out of " + minForSection + "for dominant");
                 for (String er : position)
                     System.out.print(er + "-");
             }
-            int random = (int) (Math.random() * choices.size());
-
-            currentPosition = choices.get(random);
-            position.add(indexToString.get(choices.get(random)));
-
-            if (i == minForSection - 1) { //check if last one is valid exit chord
-                i--;
-                if (dominantExit[stringToIndex.get(position.get(position.size() - 1))] == 1)
-                    i++;
+            int random;
+            if (i < minForSection - 1) {
+                random = (int) (Math.random() * choices.size());
+                currentChordIndex = choices.get(random);
+            } else {
+                ArrayList<Integer> exitChoices = new ArrayList<Integer>();
+                for (int j = 0; j < dominantMatrix.length; ++j)
+                    //check if last one is valid exit chord
+                    //done here so progressions are shorter and don't go on forever
+                    if (dominantMatrix[currentChordIndex][j] == 1 && dominantExit[j] == 1)
+                        exitChoices.add(j);
+                if (exitChoices.size() == 0) { // no exit possibility, so have to go on
+                    i--;
+                    random = (int) (Math.random() * choices.size());
+                    currentChordIndex = choices.get(random);
+                } else {
+                    random = (int) (Math.random() * exitChoices.size());
+                    currentChordIndex = exitChoices.get(random);
+                }
             }
+            position.add(indexToString.get(currentChordIndex));
         }
         position.add("I");
 
@@ -960,16 +1041,67 @@ public class HarmonyEngine {
             Pitch temp2 = new Pitch(scale.scale[(temp[0] - 1) % 7]);
             char tonicizequality = (temp[6] == 0 || temp[6] == 3 || temp[6] == 4 ? 'P' : 'M'); //P1, P4, P5
             temp2 = Pitch.getHigherPitchWithInterval(temp2, temp[6]+1, tonicizequality);
-            char modify = temp[7] == -1 ? 'b' : ' ';
+            char modify = (temp[7] == -1 ? 'b' : (temp[7] == 1 ? '#' : ' '));
             if (temp[7] == -1) { // lowered pitches
                 temp2 =Pitch.getHigherPitchWithInterval(temp2, 3, 'm');
                 temp2 =Pitch.getHigherPitchWithInterval(temp2, -3, 'M');
+            }
+            if (temp[7] == 1) { // raised pitches
+                temp2 =Pitch.getHigherPitchWithInterval(temp2, -3, 'm');
+                temp2 =Pitch.getHigherPitchWithInterval(temp2, 3, 'M');
             }
 
             chordx[index] = new Chord(temp2, temp[1], temp[2], (char) (temp[3]), (char) (temp[4]), (char) (temp[5]), modify);
             ++index;
         }
         return new Object[]{chpro, chordx, toniz, chpro.length};
+    }
+
+    public String makeProgressionFromHTData(int choice) {
+        String result = "";
+        ArrayList<String> chords = new ArrayList<String>();
+
+        JSONObject current = choice == 1 ? HTData1 : HTData2;
+        String[] keys = JSONObject.getNames(current);
+
+        try {
+
+
+            while (current != null && keys!= null && keys.length > 0) {
+                double sum = 0;
+
+                for (int i=0; i< keys.length; ++i) {
+                    sum += current.getJSONObject(keys[i]).getDouble("%");
+                }
+
+                String key = keys[keys.length-1];
+                double random = Math.random();
+                double acc = 0;
+
+                for (int i=0; i< keys.length; ++i) {
+                    double adjustedProb = current.getJSONObject(keys[i]).getDouble("%") * 1.0 / sum;
+                    if (random <= acc + adjustedProb) {
+                        key = keys[i];
+                        break;
+                    }
+                    acc += adjustedProb;
+                }
+
+                chords.add(HTConvertID.getString(key));
+
+
+                current = current.getJSONObject(key).getJSONObject("-");
+                keys = JSONObject.getNames(current);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        for (int i=0; i< chords.size(); ++i) {
+            result += chords.get(i) + (i < chords.size()-1 ? "-" : "");
+        }
+
+        return result;
     }
 
     public boolean buildProperBass() {
@@ -1046,6 +1178,8 @@ public class HarmonyEngine {
             String roman = "";
             if (chord[i].isFlat)
                 roman += "b";
+            if (chord[i].isSharp)
+                roman += "#";
             switch (progression[i]) {
                 case 1:
                     roman += "I";
@@ -1164,6 +1298,10 @@ public class HarmonyEngine {
         if (isFlat) {
             text = text.substring(1);
         }
+        boolean isSharp = text.substring(0, 1).equals("#");
+        if (isSharp) {
+            text = text.substring(1);
+        }
 
         String newText = text.toLowerCase();
         int split = newText.length();
@@ -1242,7 +1380,7 @@ public class HarmonyEngine {
             fifth = 'P';
         }
 
-        return new int[]{root, (is7 ? 4 : 3), inv, third, fifth, seventh, 0, isFlat? -1 : 0};
+        return new int[]{root, (is7 ? 4 : 3), inv, third, fifth, seventh, 0, isFlat? -1 : (isSharp? 1 : 0)};
 
     }
 }

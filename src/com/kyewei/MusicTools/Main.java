@@ -1,3 +1,4 @@
+package com.kyewei.MusicTools;
 import javax.swing.*;
 
 public class Main extends JApplet {
@@ -26,6 +27,7 @@ public class Main extends JApplet {
                 }
             });
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

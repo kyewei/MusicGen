@@ -1,3 +1,5 @@
+package com.kyewei.MusicTools;
+
 import javax.sound.midi.*;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -13,6 +15,8 @@ import javax.sound.midi.MidiSystem;
 /**
  * Created by Kye on 2014-07-18.
  */
+
+
 public class HarmonyController {
     private HarmonyEngine engine;
     //private JFrame mainFrame;
@@ -33,6 +37,8 @@ public class HarmonyController {
         panel.button0.addActionListener(new Action("Action", KeyEvent.VK_A));
         panel.button1.addActionListener(new Action());
         panel.button2.addActionListener(new Action());
+        panel.HTButton1.addActionListener(new Action());
+        panel.HTButton2.addActionListener(new Action());
         panel.button4.addActionListener(new Action());
 
         panel.makeBass.addActionListener(new Action());
@@ -337,8 +343,15 @@ public class HarmonyController {
                 panel.scorePanel.updateCurrentChord(engine.currentChord);
 
                 //mainFrame.repaint();
-            } else if (e.getSource() == panel.button4) {
-                String input = JOptionPane.showInputDialog("Enter chord progression separated by dashes '-' using functional chord notation: ");
+            } else if (e.getSource() == panel.button4 || e.getSource() == panel.HTButton1 || e.getSource() == panel.HTButton2) {
+
+                String input = "";
+                if (e.getSource() == panel.button4)
+                    input = JOptionPane.showInputDialog("Enter chord progression separated by dashes '-' using functional chord notation: ");
+                else if (e.getSource() == panel.HTButton1)
+                    input = engine.makeProgressionFromHTData(1);
+                else if (e.getSource() == panel.HTButton2)
+                    input = engine.makeProgressionFromHTData(2);
 
                 if (input != null && !input.equals("")) {
                     String[] input2 = input.trim().split("-");
@@ -359,10 +372,14 @@ public class HarmonyController {
                         Pitch temp2 = new Pitch(engine.scale.scale[(temp[0] - 1) % 7]);
                         char tonicizequality = (temp[6] == 0 || temp[6] == 3 || temp[6] == 4 ? 'P' : 'M'); //P1, P4, P5
                         temp2 = Pitch.getHigherPitchWithInterval(temp2, temp[6]+1, tonicizequality);
-                        char modify = temp[7] == -1 ? 'b' : ' ';
+                        char modify = (temp[7] == -1 ? 'b' : (temp[7] == 1 ? '#' : ' '));
                         if (temp[7] == -1) { // lowered pitches
                             temp2 =Pitch.getHigherPitchWithInterval(temp2, 3, 'm');
                             temp2 =Pitch.getHigherPitchWithInterval(temp2, -3, 'M');
+                        }
+                        if (temp[7] == 1) { // raised pitches
+                            temp2 =Pitch.getHigherPitchWithInterval(temp2, -3, 'm');
+                            temp2 =Pitch.getHigherPitchWithInterval(temp2, 3, 'M');
                         }
                         chordx[i] = new Chord(temp2, temp[1], temp[2], (char) (temp[3]), (char) (temp[4]), (char) (temp[5]), modify);
                     }

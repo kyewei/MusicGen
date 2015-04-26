@@ -1,6 +1,8 @@
 /**
  * Created by Kye on 2014-07-10.
  */
+package com.kyewei.MusicTools;
+
 public class HarmonicMinorScale extends Scale {
     public HarmonicMinorScale(String key) {
         scale = allScales[indexFromKey(key)];

@@ -1,3 +1,4 @@
+package com.kyewei.MusicTools;
 /**
  * Created by Kye on 2014-07-07.
  */
@@ -32,7 +33,7 @@ public class HarmonyView extends JPanel {
     }
 
     public JButton button0, button1, button2, button4, makeBass, makeChord, nextButton, prevButton, completeAll, fun;
-    public JButton playMidi;
+    public JButton playMidi, HTButton1, HTButton2;
     public JLabel keyInfo, progressionInfo, numberOfChordsInfo;
     public JPanel keyPanel, progressionPanel, middlePanel, navigationPanel;
     public ScorePanel scorePanel;
@@ -85,9 +86,14 @@ public class HarmonyView extends JPanel {
         button0 = new JButton("Type 1");
         button1 = new JButton("Type 2");
         button2 = new JButton("T-P-D (Most Complex)");
+        HTButton1 = new JButton("1");
+        HTButton2 = new JButton("2");
         middlePanel.add(button0);
         middlePanel.add(button1);
         middlePanel.add(button2);
+        middlePanel.add(new JLabel(" HookTheory Data: "));
+        middlePanel.add(HTButton1);
+        middlePanel.add(HTButton2);
         middlePanel.add(new JLabel(" or "));
         button4 = new JButton("Enter One");
         middlePanel.add(button4);
