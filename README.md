@@ -5,6 +5,9 @@ This is a little tool I made that can generate random progressions of 4-part har
 
 Try out the applet [here](http://kyewei.github.io/MusicTools/)! Java is required.
 
+###Screenshots
+![Screenshot1](Screenshot.PNG?raw=true)
+
 ##Motivation
 The primary reason I built this was mostly because I wanted a way of organizing the harmony knowledge I learned in preparation for the RCM Harmony exam I did this summer. 
 Proper MVC design was fun too. It ended up being a bigger project than I thought. 
