@@ -1,4 +1,4 @@
-MusicTools
+MusicGen
 ==========
 
 This is a little tool I made that can generate random progressions of 4-part harmony for SATB. It produces notes for 4 voices that are approximately 8-10 notes long. The output is visualized on a graphic staff accompanied by their respective functional chord symbols. 
