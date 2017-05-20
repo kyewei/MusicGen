@@ -5,15 +5,15 @@ This is a little tool I made that can generate random progressions of 4-part har
 
 Try out the applet [here](http://kyewei.github.io/MusicTools/)! Java is required.
 
-###Screenshots
+### Screenshots
 ![Screenshot1](Screenshot.PNG?raw=true)
 
-##Motivation
+## Motivation
 The primary reason I built this was mostly because I wanted a way of organizing the harmony knowledge I learned in preparation for the RCM Harmony exam I did this summer. 
 Proper MVC design was fun too. It ended up being a bigger project than I thought. 
 The core part was mapping out the matrices that summarized patterns in the tonic, predominant and dominant harmony sections of a piece of music, which ended up being a central part of my implementation. 
 
-####Update: 4/21/2015
+#### Update: 4/21/2015
 I've recently be made aware of HookTheory's API for its crowd-sourced song chord collection. 
 They contain probabilities of a chord following some previous chord, and of progressions also. 
 I've written some scripts in Node.js to scrape and analyze. 
@@ -21,7 +21,7 @@ They are in the `hooktheory-api-data-js` folder.
 I've also added the data I've collected from its API as a source in the application for generating progressions.
 
 
-##Implementation and Rationale
+## Implementation and Rationale
 
 My idea was to first generate an appropriate functional chord progression. The progression would end in a cadence of some sort. 
 It would then automatically produce a SATB voicing following said progression that would adhere to traditional rules of 4 part writing. 
@@ -46,7 +46,7 @@ I had brainstormed many ways to potentially do this. I ended up doing it in two 
 In the end, I would say that the second way was a lot more successful, in that the music generated made more sense from an analysis point of view.
 
 
-##Rundown of Features
+## Rundown of Features
 
 * Can specify key (only major for now) piece is generated in
 * Choice between stochastic matrix and tonic-predominant-dominant matrix
@@ -58,7 +58,7 @@ In the end, I would say that the second way was a lot more successful, in that t
 * Tonicization (still need to fill up the matrix though)
 
 
-##Generation Bounds
+## Generation Bounds
 * Start and end on tonic
 * Soprano within C4 and A5
 * Alto within G3 and D5
@@ -72,14 +72,14 @@ In the end, I would say that the second way was a lot more successful, in that t
 * No hidden fifths (toggle-able)
 
 
-##Features in the (Near?) Future
+## Features in the (Near?) Future
 * Minor key
 * Modulation (have secondary dominants/sub-dominants, etc, now)
 
 I would be happy if anyone wants to contribute to the the T-P-D matrices.
 
 
-##Licensing
+## Licensing
 
 This project uses the Musica (ver 3.12) font found [here][3]. 
 The font provides Unicode support in the 1D100-1D1DD range, which represents the Musical Symbols. The font is offered as "free for any use".
